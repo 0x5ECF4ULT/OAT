@@ -2,5 +2,6 @@
 <device-admin>
     <uses-policies>
         <force-lock />
+        <watch-login />
     </uses-policies>
 </device-admin>
