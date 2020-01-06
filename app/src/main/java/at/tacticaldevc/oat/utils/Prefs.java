@@ -3,7 +3,9 @@ package at.tacticaldevc.oat.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -11,12 +13,13 @@ import java.util.Set;
  * OAT uses Shared Preferences to store all data that is needed.
  * This ensures that the users stay in full control of their data and no data is saved on third-party servers.
  *
- * @version 0.1
+ * @version 0.2
  */
 public class Prefs {
 
     // Shared Preference information
     private final static String DOCUMENT_NAME_DATA = "oat-data";
+    private final static String DOCUMENT_NAME_PERMISSIONS = "oat-permissions";
     private final static String KEY_TRUSTED_CONTACTS = "trusted-contacts";
 
     // Trusted Contacts
@@ -49,7 +52,7 @@ public class Prefs {
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        Set<String> numbers = prefs.getStringSet(KEY_TRUSTED_CONTACTS, new HashSet<>());
+        Set<String> numbers = getAllTrustedContacts(context);
         numbers.add(phoneNumber);
 
         editor.putStringSet(KEY_TRUSTED_CONTACTS, numbers);
@@ -68,7 +71,7 @@ public class Prefs {
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        Set<String> phoneNumbers = prefs.getStringSet(KEY_TRUSTED_CONTACTS, new HashSet<>());
+        Set<String> phoneNumbers = getAllTrustedContacts(context);
 
         if (phoneNumbers.contains(phoneNumber)) {
             phoneNumbers.remove(phoneNumber);
@@ -78,5 +81,55 @@ public class Prefs {
         }
         return null;
     }
+
+
+    // Permissions
+
+    /**
+     * Fetches the permissions of the App
+     *
+     * @param context the Context of the Application
+     * @return a HashMap with all permissions
+     */
+    public static Map<String, Boolean> fetchPermissions(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_PERMISSIONS, Context.MODE_PRIVATE);
+
+        HashMap<String, Boolean> permissions = new HashMap<>();
+
+        Set<String> permissionKeys = prefs.getAll().keySet();
+        boolean value = false;
+        for (String s : permissionKeys) {
+            value = prefs.getBoolean(s, false);
+            permissions.put(s, value);
+        }
+        return permissions;
+    }
+
+    /**
+     * Updates the saved permissions
+     *
+     * @param context     the Context of the Application
+     * @param permissions the new status that should be saved
+     * @return
+     */
+    public static Map<String, Boolean> updatePermissions(Context context, Map<String, Boolean> permissions) {
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_PERMISSIONS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        Map<String, Boolean> savedPermissions = fetchPermissions(context);
+        if (savedPermissions.size() > permissions.size()) {
+            editor.clear();
+            savedPermissions = new HashMap<>();
+        }
+
+        for (String key : permissions.keySet()) {
+            if (!permissions.get(key).equals(savedPermissions.get(key)))
+                editor.putBoolean(key, permissions.get(key));
+        }
+
+        editor.apply();
+        return permissions;
+    }
+
 
 }
