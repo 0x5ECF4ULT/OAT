@@ -30,6 +30,8 @@ Things you can do:
 ## Permissions
 - ```android.permission.RECEIVE_SMS``` (to receive commands from trusted contacts via SMS)
 - ```android.permission.SEND_SMS``` (to reply to commands)
+- ```android.permission.ACCESS_COARSE_LOCATION``` (to request the current location if the feature is enabled)
+- ```android.permission.SEND_BACKGROUND_LOCATION``` (to request the current location if the feature is enabled)
 
 ## Links
  - [License](LICENSE)
