@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static at.tacticaldevc.oat.utils.Prefs.fetchPermissions;
-import static at.tacticaldevc.oat.utils.Prefs.updatePermissions;
+import static at.tacticaldevc.oat.utils.Prefs.savePermissions;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PrefsPermissionsTest {
@@ -46,13 +46,13 @@ public class PrefsPermissionsTest {
     }
 
     @Test
-    public void testUpdatePermissionsAddNewPermission() {
+    public void testSavePermissionsAddNewPermission() {
         // prepare
         Map<String, Boolean> permissions = new HashMap<>();
         permissions.put("SEND_SMS", true);
 
         // test
-        Map<String, Boolean> result = updatePermissions(InstrumentationRegistry.getInstrumentation().getTargetContext(), permissions);
+        Map<String, Boolean> result = savePermissions(InstrumentationRegistry.getInstrumentation().getTargetContext(), permissions);
 
         // assert
         SharedPreferences pref = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
@@ -66,14 +66,14 @@ public class PrefsPermissionsTest {
     }
 
     @Test
-    public void testUpdatePermissionsUpdateExistingPermission() {
+    public void testSavePermissionsUpdateExistingPermission() {
         // prepare
         Map<String, Boolean> permissions = setup();
         String permissionToUpdate = "SEND_SMS";
         permissions.put(permissionToUpdate, true);
 
         // test
-        Map<String, Boolean> result = updatePermissions(InstrumentationRegistry.getInstrumentation().getTargetContext(), permissions);
+        Map<String, Boolean> result = savePermissions(InstrumentationRegistry.getInstrumentation().getTargetContext(), permissions);
 
         // assert
         SharedPreferences pref = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
@@ -87,14 +87,14 @@ public class PrefsPermissionsTest {
     }
 
     @Test
-    public void testUpdatePermissionsDeletePermission() {
+    public void testSavePermissionsDeletePermission() {
         // prepare
         Map<String, Boolean> permissions = setup();
         String permissionToRemove = "ACCESS_COARSE_LOCATION";
         permissions.remove(permissionToRemove);
 
         // test
-        Map<String, Boolean> result = updatePermissions(InstrumentationRegistry.getInstrumentation().getTargetContext(), permissions);
+        Map<String, Boolean> result = savePermissions(InstrumentationRegistry.getInstrumentation().getTargetContext(), permissions);
 
         // assert
         SharedPreferences pref = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);

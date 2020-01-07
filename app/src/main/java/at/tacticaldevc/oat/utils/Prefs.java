@@ -112,7 +112,7 @@ public class Prefs {
      * @param permissions the new status that should be saved
      * @return
      */
-    public static Map<String, Boolean> updatePermissions(Context context, Map<String, Boolean> permissions) {
+    public static Map<String, Boolean> savePermissions(Context context, Map<String, Boolean> permissions) {
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_PERMISSIONS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -130,6 +130,4 @@ public class Prefs {
         editor.apply();
         return permissions;
     }
-
-
 }
