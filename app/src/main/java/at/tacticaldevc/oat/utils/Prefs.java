@@ -21,6 +21,7 @@ public class Prefs {
     private final static String DOCUMENT_NAME_DATA = "oat-data";
     private final static String DOCUMENT_NAME_PERMISSIONS = "oat-permissions";
     private final static String DOCUMENT_NAME_ENABLED_FEATURES = "oat-enabled-features";
+    private final static String DOCUMENT_NAME_ACCEPTED_CONDITIONS = "oat-accepted-conditions";
     private final static String KEY_TRUSTED_CONTACTS = "trusted-contacts";
 
     // Trusted Contacts
@@ -179,4 +180,54 @@ public class Prefs {
         editor.apply();
         return newValue;
     }
+
+    // Accepted Terms & Conditions
+
+    /**
+     * Fetches the saved accepted Conditions
+     *
+     * @param context the Context of the Application
+     * @return a HashMap with all conditions
+     */
+    public static Map<String, Boolean> fetchConditionsAccepted(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ACCEPTED_CONDITIONS, Context.MODE_PRIVATE);
+
+        HashMap<String, Boolean> conditionsAccepted = new HashMap<>();
+
+        Set<String> conditionKeys = prefs.getAll().keySet();
+        for (String s : conditionKeys) {
+            conditionsAccepted.put(s, prefs.getBoolean(s, false));
+        }
+        return conditionsAccepted;
+    }
+
+    /**
+     * Fetches if target Condition was accepted
+     *
+     * @param context the Context of the Application
+     * @param key     the key (name) of the target Condition
+     * @return if the Condition was accepted, false if the feature could not be found
+     */
+    public static boolean fetchConditionAccepted(Context context, String key) {
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ACCEPTED_CONDITIONS, Context.MODE_PRIVATE);
+        return prefs.getBoolean(key, false);
+    }
+
+    /**
+     * Saves the condition accepted status ot target condition
+     *
+     * @param context  the Context of the Application
+     * @param key      the key (name) of the target condition that should be saved
+     * @param newValue the new value of the Condition's accepted status
+     * @return the current accepted status of the Condition
+     */
+    public static boolean saveConditionAccepted(Context context, String key, boolean newValue) {
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ACCEPTED_CONDITIONS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putBoolean(key, newValue);
+        editor.apply();
+        return newValue;
+    }
+
 }
