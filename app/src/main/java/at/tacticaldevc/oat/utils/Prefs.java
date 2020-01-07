@@ -8,6 +8,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static at.tacticaldevc.oat.utils.Ensurer.ensureNotNull;
+import static at.tacticaldevc.oat.utils.Ensurer.ensurePhoneNumberIsValid;
+import static at.tacticaldevc.oat.utils.Ensurer.ensureStringIsValid;
+
 /**
  * A helper class for preference management
  * OAT uses Shared Preferences to store all data that is needed.
@@ -33,6 +37,8 @@ public class Prefs {
      * @return A Set<String> with all trusted Contacts
      */
     public static Set<String> getAllTrustedContacts(Context context) {
+        ensureNotNull(context, "Application Context");
+
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
         return prefs.getStringSet(KEY_TRUSTED_CONTACTS, new HashSet<>());
     }
@@ -46,10 +52,8 @@ public class Prefs {
      * @throws IllegalArgumentException if phone number is 0 or smaller
      */
     public static String addTrustedContact(Context context, String phoneNumber) {
-        if (phoneNumber == null || phoneNumber.isEmpty())
-            throw new IllegalArgumentException("Invalid phone number (" + phoneNumber + ")");
-        if (!android.util.Patterns.PHONE.matcher(phoneNumber).matches())
-            throw new IllegalArgumentException("Invalid phone number (" + phoneNumber + ")");
+        ensureNotNull(context, "Application Context");
+        ensurePhoneNumberIsValid(phoneNumber, "new trusted contact");
 
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -70,6 +74,9 @@ public class Prefs {
      * @return the removed Trusted Contact if removal was successful or null if it wasn't
      */
     public static String removeTrustedContact(Context context, String phoneNumber) {
+        ensureNotNull(context, "Application Context");
+        ensureStringIsValid(phoneNumber, "phone number");
+
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -94,6 +101,8 @@ public class Prefs {
      * @return a HashMap with all permissions
      */
     public static Map<String, Boolean> fetchPermissions(Context context) {
+        ensureNotNull(context, "Application Context");
+
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_PERMISSIONS, Context.MODE_PRIVATE);
 
         HashMap<String, Boolean> permissions = new HashMap<>();
@@ -113,6 +122,9 @@ public class Prefs {
      * @return
      */
     public static Map<String, Boolean> savePermissions(Context context, Map<String, Boolean> permissions) {
+        ensureNotNull(context, "Application Context");
+        ensureNotNull(permissions, "Permission Map");
+
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_PERMISSIONS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -141,6 +153,8 @@ public class Prefs {
      * @return a HashMap with the enabled Status of all Features
      */
     public static Map<String, Boolean> fetchFeaturesEnabled(Context context) {
+        ensureNotNull(context, "Application Context");
+
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ENABLED_FEATURES, Context.MODE_PRIVATE);
 
         HashMap<String, Boolean> enabledFeatures = new HashMap<>();
@@ -160,6 +174,9 @@ public class Prefs {
      * @return if the Feature is set to enabled, false if the feature could not be found
      */
     public static boolean fetchFeatureEnabledStatus(Context context, String key) {
+        ensureNotNull(context, "Application Context");
+        ensureStringIsValid(key, "Feature key");
+
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ENABLED_FEATURES, Context.MODE_PRIVATE);
         return prefs.getBoolean(key, false);
     }
@@ -173,6 +190,9 @@ public class Prefs {
      * @return the current enabled status of the Feature
      */
     public static boolean saveFeatureEnabledStatus(Context context, String key, boolean newValue) {
+        ensureNotNull(context, "Application Context");
+        ensureStringIsValid(key, "Feature key");
+
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ENABLED_FEATURES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -190,6 +210,8 @@ public class Prefs {
      * @return a HashMap with all conditions
      */
     public static Map<String, Boolean> fetchConditionsAccepted(Context context) {
+        ensureNotNull(context, "Application Context");
+
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ACCEPTED_CONDITIONS, Context.MODE_PRIVATE);
 
         HashMap<String, Boolean> conditionsAccepted = new HashMap<>();
@@ -209,6 +231,9 @@ public class Prefs {
      * @return if the Condition was accepted, false if the feature could not be found
      */
     public static boolean fetchConditionAccepted(Context context, String key) {
+        ensureNotNull(context, "Application Context");
+        ensureStringIsValid(key, "Condition key");
+
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ACCEPTED_CONDITIONS, Context.MODE_PRIVATE);
         return prefs.getBoolean(key, false);
     }
@@ -222,6 +247,9 @@ public class Prefs {
      * @return the current accepted status of the Condition
      */
     public static boolean saveConditionAccepted(Context context, String key, boolean newValue) {
+        ensureNotNull(context, "Application Context");
+        ensureStringIsValid(key, "Condition key");
+
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ACCEPTED_CONDITIONS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
