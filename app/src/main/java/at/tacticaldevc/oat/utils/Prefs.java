@@ -20,6 +20,7 @@ public class Prefs {
     // Shared Preference information
     private final static String DOCUMENT_NAME_DATA = "oat-data";
     private final static String DOCUMENT_NAME_PERMISSIONS = "oat-permissions";
+    private final static String DOCUMENT_NAME_ENABLED_FEATURES = "oat-enabled-features";
     private final static String KEY_TRUSTED_CONTACTS = "trusted-contacts";
 
     // Trusted Contacts
@@ -97,10 +98,8 @@ public class Prefs {
         HashMap<String, Boolean> permissions = new HashMap<>();
 
         Set<String> permissionKeys = prefs.getAll().keySet();
-        boolean value = false;
         for (String s : permissionKeys) {
-            value = prefs.getBoolean(s, false);
-            permissions.put(s, value);
+            permissions.put(s, prefs.getBoolean(s, false));
         }
         return permissions;
     }
@@ -129,5 +128,55 @@ public class Prefs {
 
         editor.apply();
         return permissions;
+    }
+
+
+    // Enabled Features
+
+    /**
+     * Fetches the saved enabled Features of the App
+     *
+     * @param context the Context of the Application
+     * @return a HashMap with the enabled Status of all Features
+     */
+    public static Map<String, Boolean> fetchFeaturesEnabled(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ENABLED_FEATURES, Context.MODE_PRIVATE);
+
+        HashMap<String, Boolean> enabledFeatures = new HashMap<>();
+
+        Set<String> featureKeys = prefs.getAll().keySet();
+        for (String s : featureKeys) {
+            enabledFeatures.put(s, prefs.getBoolean(s, false));
+        }
+        return enabledFeatures;
+    }
+
+    /**
+     * Fetches if target Feature is set to enabled
+     *
+     * @param context the Context of the Application
+     * @param key     the key of the target Feature
+     * @return if the Feature is set to enabled, false if the feature could not be found
+     */
+    public static boolean fetchFeatureEnabledStatus(Context context, String key) {
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ENABLED_FEATURES, Context.MODE_PRIVATE);
+        return prefs.getBoolean(key, false);
+    }
+
+    /**
+     * Saves the enabled Status of target Feature
+     *
+     * @param context  the Context of the Application
+     * @param key      the key of the target Feature whose enabled status should be saved
+     * @param newValue the new value of the Feature's enabled status
+     * @return the current enabled status of the Feature
+     */
+    public static boolean saveFeatureEnabledStatus(Context context, String key, boolean newValue) {
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_ENABLED_FEATURES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putBoolean(key, newValue);
+        editor.apply();
+        return newValue;
     }
 }
