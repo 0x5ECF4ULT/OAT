@@ -15,7 +15,7 @@ public class EnsurerTest {
     @ValueSource(strings = {"object", "teststring", "1", " ", ""})
     void testEnsureNotNullWithCorrectValues(Object object) {
         // test
-        Object result = ensureNotNull(object);
+        Object result = ensureNotNull(object, "testValue");
 
         // assert
         assertThat(result).isSameAs(object);
@@ -23,28 +23,23 @@ public class EnsurerTest {
 
     @Test
     void testEnsureNotNullWithNullValues() {
-        assertThrows(IllegalArgumentException.class, () -> ensureNotNull(null));
-        assertThrows(IllegalArgumentException.class, () -> ensureNotNull((String) null));
-        assertThrows(IllegalArgumentException.class, () -> ensureNotNull(null), "testValue");
-        assertThrows(IllegalArgumentException.class, () -> ensureNotNull((String) null), "testValue");
+        assertThrows(IllegalArgumentException.class, () -> ensureNotNull(null, "testValue"));
+        assertThrows(IllegalArgumentException.class, () -> ensureNotNull((String) null, "testValue"));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"string", "testString", "1"})
     void testEnsureStringIsValidWithCorrectValues(String value) {
         // test
-        String result1 = ensureStringIsValid(value);
-        String result2 = ensureStringIsValid(value, "testValue");
+        String result = ensureStringIsValid(value, "testValue");
 
         // assert
-        assertThat(result1).isSameAs(value);
-        assertThat(result2).isSameAs(value);
+        assertThat(result).isSameAs(value);
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "\n", "\r", "\n\r"})
     void testEnsureStringIsValidWithIncorrectValues(String value) {
-        assertThrows(IllegalArgumentException.class, () -> ensureStringIsValid(value));
         assertThrows(IllegalArgumentException.class, () -> ensureStringIsValid(value, "testValue"));
     }
 

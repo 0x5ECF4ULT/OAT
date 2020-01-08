@@ -7,15 +7,6 @@ import android.util.Patterns;
  */
 public class Ensurer {
 
-    /**
-     * Ensures that a target Object of type T is not null
-     *
-     * @param obj the Object to be checked
-     * @return the unchanged Object
-     */
-    public static <T> T ensureNotNull(T obj) {
-        return ensureNotNull(obj, "Object");
-    }
 
     /**
      * Ensures that a target Object of type T is not null
@@ -29,18 +20,6 @@ public class Ensurer {
         return obj;
     }
 
-    /**
-     * Ensures that a target String is valid
-     * A String is valid if it is...
-     * * ... not null
-     * * ... not empty
-     *
-     * @param string the String to be validated
-     * @return the unchanged String
-     */
-    public static String ensureStringIsValid(String string) {
-        return ensureStringIsValid(string, "string");
-    }
 
     /**
      * Ensures that a target String is valid
@@ -58,15 +37,6 @@ public class Ensurer {
         return string;
     }
 
-    /**
-     * Ensures that target Phone Number is valid
-     *
-     * @param phoneNumber the phone number to be validated
-     * @return the phone number as an unchanged String
-     */
-    public static String ensurePhoneNumberIsValid(String phoneNumber) {
-        return ensurePhoneNumberIsValid(phoneNumber, "phone number");
-    }
 
     /**
      * Ensures that target Phone Number is valid
