@@ -17,16 +17,17 @@ import static at.tacticaldevc.oat.utils.Ensurer.ensureStringIsValid;
  * OAT uses Shared Preferences to store all data that is needed.
  * This ensures that the users stay in full control of their data and no data is saved on third-party servers.
  *
- * @version 0.2
+ * @version 0.3
  */
 public class Prefs {
 
-    // Shared Preference information
+    // private Shared Preference information
     private final static String DOCUMENT_NAME_DATA = "oat-data";
     private final static String DOCUMENT_NAME_PERMISSIONS = "oat-permissions";
     private final static String DOCUMENT_NAME_ENABLED_FEATURES = "oat-enabled-features";
     private final static String DOCUMENT_NAME_ACCEPTED_CONDITIONS = "oat-accepted-conditions";
     private final static String KEY_TRUSTED_CONTACTS = "trusted-contacts";
+    private final static String KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP = "missing-permission";
 
     // Trusted Contacts
 
@@ -256,6 +257,69 @@ public class Prefs {
         editor.putBoolean(key, newValue);
         editor.apply();
         return newValue;
+    }
+
+    // Request Permission on Startup
+
+    /**
+     * Adds a permission to the permissions that have to be requested when the user opens the App the next time.
+     * These permissions are necessary for an activated feature to work and have been revoked by the user.
+     *
+     * @param context    the Context of the Application
+     * @param permission the key of the permission that is missing
+     * @return the added permission
+     */
+    public static String addNewOnStartupPermissionRequest(Context context, String permission) {
+        ensureNotNull(context, "Application Context");
+        ensureStringIsValid(permission, "missing permission");
+
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        Set<String> missingPermissions = prefs.getStringSet(KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP, new HashSet<String>());
+        if (!missingPermissions.contains(permission)) {
+            missingPermissions.add(permission);
+            editor.putStringSet(KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP, missingPermissions);
+            editor.apply();
+        }
+        return permission;
+    }
+
+    /**
+     * Removes a permission from the Set of permissions that are requested when the user opens the App the next time.
+     *
+     * @param context    the Context of the Application
+     * @param permission the key of the permission to be removed
+     * @return the removed permission
+     */
+    public static String removeOnStartupPermissionRequest(Context context, String permission) {
+        ensureNotNull(context, "Application Context");
+        ensureStringIsValid(permission, "missing permission to be removed");
+
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        Set<String> missingPermissions = prefs.getStringSet(KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP, new HashSet<>());
+        if (missingPermissions.contains(permission)) {
+            missingPermissions.remove(permission);
+            editor.putStringSet(KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP, missingPermissions);
+            editor.apply();
+        }
+        return permission;
+    }
+
+    /**
+     * Fetches all permissions that need to be requested from the user when the user opens the App.
+     *
+     * @param context the Context of the Application
+     * @return all permissions that need to be requested
+     */
+    public static Set<String> fetchOnStartupPermissionRequests(Context context) {
+        ensureNotNull(context, "Application Context");
+
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
+
+        return prefs.getStringSet(KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP, new HashSet<>());
     }
 
 }
