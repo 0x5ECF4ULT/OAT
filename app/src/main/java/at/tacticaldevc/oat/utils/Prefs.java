@@ -34,7 +34,7 @@ public class Prefs {
     /**
      * Returns all trusted contacts
      *
-     * @param context the Context of the Application
+     * @param context the {@link Context} of the Application
      * @return A Set<String> with all trusted Contacts
      */
     public static Set<String> getAllTrustedContacts(Context context) {
@@ -47,7 +47,7 @@ public class Prefs {
     /**
      * Adds a new trusted contact
      *
-     * @param context     the Context of the Application
+     * @param context     the {@link Context} of the Application
      * @param phoneNumber the phone number to be added
      * @return
      * @throws IllegalArgumentException if phone number is 0 or smaller
@@ -70,7 +70,7 @@ public class Prefs {
     /**
      * Removes an existing trusted contact
      *
-     * @param context     the Context of the Application
+     * @param context     the {@link Context} of the Application
      * @param phoneNumber the phone number to be removed
      * @return the removed Trusted Contact if removal was successful or null if it wasn't
      */
@@ -98,7 +98,7 @@ public class Prefs {
     /**
      * Fetches the permissions of the App
      *
-     * @param context the Context of the Application
+     * @param context the {@link Context} of the Application
      * @return a HashMap with all permissions
      */
     public static Map<String, Boolean> fetchPermissions(Context context) {
@@ -118,7 +118,7 @@ public class Prefs {
     /**
      * Updates the saved permissions
      *
-     * @param context     the Context of the Application
+     * @param context     the {@link Context} of the Application
      * @param permissions the new status that should be saved
      * @return
      */
@@ -150,7 +150,7 @@ public class Prefs {
     /**
      * Fetches the saved enabled Features of the App
      *
-     * @param context the Context of the Application
+     * @param context the {@link Context} of the Application
      * @return a HashMap with the enabled Status of all Features
      */
     public static Map<String, Boolean> fetchFeaturesEnabled(Context context) {
@@ -170,7 +170,7 @@ public class Prefs {
     /**
      * Fetches if target Feature is set to enabled
      *
-     * @param context the Context of the Application
+     * @param context the {@link Context} of the Application
      * @param key     the key of the target Feature
      * @return if the Feature is set to enabled, false if the feature could not be found
      */
@@ -185,7 +185,7 @@ public class Prefs {
     /**
      * Saves the enabled Status of target Feature
      *
-     * @param context  the Context of the Application
+     * @param context  the {@link Context} of the Application
      * @param key      the key of the target Feature whose enabled status should be saved
      * @param newValue the new value of the Feature's enabled status
      * @return the current enabled status of the Feature
@@ -207,7 +207,7 @@ public class Prefs {
     /**
      * Fetches the saved accepted Conditions
      *
-     * @param context the Context of the Application
+     * @param context the {@link Context} of the Application
      * @return a HashMap with all conditions
      */
     public static Map<String, Boolean> fetchConditionsAccepted(Context context) {
@@ -227,7 +227,7 @@ public class Prefs {
     /**
      * Fetches if target Condition was accepted
      *
-     * @param context the Context of the Application
+     * @param context the {@link Context} of the Application
      * @param key     the key (name) of the target Condition
      * @return if the Condition was accepted, false if the feature could not be found
      */
@@ -242,7 +242,7 @@ public class Prefs {
     /**
      * Saves the condition accepted status ot target condition
      *
-     * @param context  the Context of the Application
+     * @param context  the {@link Context} of the Application
      * @param key      the key (name) of the target condition that should be saved
      * @param newValue the new value of the Condition's accepted status
      * @return the current accepted status of the Condition
@@ -265,7 +265,7 @@ public class Prefs {
      * Adds a permission to the permissions that have to be requested when the user opens the App the next time.
      * These permissions are necessary for an activated feature to work and have been revoked by the user.
      *
-     * @param context    the Context of the Application
+     * @param context    the {@link Context} of the Application
      * @param permission the key of the permission that is missing
      * @return the added permission
      */
@@ -288,7 +288,7 @@ public class Prefs {
     /**
      * Removes a permission from the Set of permissions that are requested when the user opens the App the next time.
      *
-     * @param context    the Context of the Application
+     * @param context    the {@link Context} of the Application
      * @param permission the key of the permission to be removed
      * @return the removed permission
      */
@@ -311,7 +311,7 @@ public class Prefs {
     /**
      * Fetches all permissions that need to be requested from the user when the user opens the App.
      *
-     * @param context the Context of the Application
+     * @param context the {@link Context} of the Application
      * @return all permissions that need to be requested
      */
     public static Set<String> fetchOnStartupPermissionRequests(Context context) {
