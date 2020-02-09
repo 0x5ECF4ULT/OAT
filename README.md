@@ -2,7 +2,7 @@
 **DISCLAIMER:** I am NOT responsible for any damage caused by this app! If you come crying to me with tears in your eyes because you lost your job or something I WILL POINT MY FINGER AT YOU AND LAUGH! I am not responsible for ANYTHING! Period.
 
 ## Description
-Have you ever seen an anti-theft app that is FLOSS and available on Play Store or F-Droid? Me neither... But here it is ahaha! Your possibility to make your phone safe in case of loss or robbery.
+Have you ever seen an anti-theft app that is FLOSS and available on Play Store or F-Droid? Me neither... But here it is! Your possibility to make your phone safe in case of loss or robbery.
 
 OAT or Open Anti-Theft is an application that can protect your phone if it gets lost or stolen. It was created with security and privacy in mind. It uses all of Android's powers to protect your data! Even the most creative ways are used to make everything safe from thieves. Yes the application may need tons of permissions but that's part of it. 
 
@@ -28,6 +28,8 @@ Things you can do:
  - Backup to homeserver
 
 ## Permissions
+- ```android.permission.RECEIVE_SMS``` (to receive commands from trusted contacts via SMS)
+- ```android.permission.SEND_SMS``` (to reply to commands)
 
 ## Links
  - [License](LICENSE)
