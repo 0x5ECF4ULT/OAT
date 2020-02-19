@@ -2,11 +2,18 @@ package at.tacticaldevc.oat.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import at.tacticaldevc.oat.exceptions.OATApplicationException;
 
 import static at.tacticaldevc.oat.utils.Ensurer.ensureNotNull;
 import static at.tacticaldevc.oat.utils.Ensurer.ensurePhoneNumberIsValid;
@@ -21,13 +28,85 @@ import static at.tacticaldevc.oat.utils.Ensurer.ensureStringIsValid;
  */
 public class Prefs {
 
-    // private Shared Preference information
+    // Shared Preference information
     private final static String DOCUMENT_NAME_DATA = "oat-data";
     private final static String DOCUMENT_NAME_PERMISSIONS = "oat-permissions";
     private final static String DOCUMENT_NAME_ENABLED_FEATURES = "oat-enabled-features";
     private final static String DOCUMENT_NAME_ACCEPTED_CONDITIONS = "oat-accepted-conditions";
     private final static String KEY_TRUSTED_CONTACTS = "trusted-contacts";
+    private final static String KEY_COMMAND_PASSWORD = "password";
+    private final static String KEY_COMMAND_PASSWORD_SALT = "pwdsalt";
     private final static String KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP = "missing-permission";
+
+    // Basic Data
+
+    /**
+     * Updates the Password used to send commands to the App
+     *
+     * @param context  the Context of the Application
+     * @param password the new Password
+     */
+    public static void savePassword(Context context, String password) {
+        ensureNotNull(context, "Application Context");
+        ensureStringIsValid(password, "new User Password");
+
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        byte[] salt;
+        MessageDigest algorithm;
+        try {
+            algorithm = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException ex) {
+            throw OATApplicationException.forLibraryError("MessageDigest", ex);
+        }
+
+        if (prefs.getString(KEY_COMMAND_PASSWORD_SALT, null) == null) {
+            SecureRandom rnd = new SecureRandom();
+            salt = new byte[16];
+            rnd.nextBytes(salt);
+            editor.putString(KEY_COMMAND_PASSWORD_SALT, Base64.encodeToString(salt, Base64.NO_WRAP));
+        } else {
+            salt = Base64.decode(prefs.getString(KEY_COMMAND_PASSWORD_SALT, null), Base64.NO_WRAP);
+        }
+        algorithm.update(salt);
+        String hash = Base64.encodeToString(algorithm.digest(password.getBytes()), Base64.NO_WRAP);
+
+        editor.putString(KEY_COMMAND_PASSWORD, hash);
+        editor.apply();
+    }
+
+    /**
+     * Verifies that a given Password is correct
+     *
+     * @param context         the Context of the Application
+     * @param passwordToCheck the password to be verified
+     * @return true if the password matches the password that was stored
+     */
+    public static boolean verifyApplicationPassword(Context context, String passwordToCheck) {
+        ensureNotNull(context, "Application Context");
+        try {
+            ensureStringIsValid(passwordToCheck, "password to check");
+        } catch (IllegalArgumentException ex) {
+            return false;
+        }
+
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
+
+        String salt = prefs.getString(KEY_COMMAND_PASSWORD_SALT, "");
+        MessageDigest algorithm;
+        try {
+            algorithm = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException ex) {
+            throw OATApplicationException.forLibraryError("MessageDigest", ex);
+        }
+        algorithm.update(Base64.decode(salt, Base64.NO_WRAP));
+        byte[] hashToCheck = algorithm.digest(passwordToCheck.getBytes());
+
+        String hash = prefs.getString(KEY_COMMAND_PASSWORD, null);
+        if (hash == null) throw OATApplicationException.forNoPasswordSet();
+        return Arrays.equals(Base64.decode(hash, Base64.NO_WRAP), hashToCheck);
+    }
 
     // Trusted Contacts
 

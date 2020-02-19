@@ -2,6 +2,7 @@ package at.tacticaldevc.oat.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -9,8 +10,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Set;
+
+import at.tacticaldevc.oat.exceptions.OATApplicationException;
 
 import static at.tacticaldevc.oat.utils.Prefs.addNewOnStartupPermissionRequest;
 import static at.tacticaldevc.oat.utils.Prefs.addTrustedContact;
@@ -25,6 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class PrefsDataTest {
     private static final String DOCUMENT_NAME_TEST = "oat-data";
     private final static String KEY_TRUSTED_CONTACTS = "trusted-contacts";
+    private final static String KEY_COMMAND_PASSWORD = "password";
+    private final static String KEY_COMMAND_PASSWORD_SALT = "pwdsalt";
     private final static String KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP = "missing-permission";
 
     @Before
@@ -32,11 +39,109 @@ public class PrefsDataTest {
         clean();
     }
 
+    // password
+    @Test
+    public void savePasswordWithInvalidValues() {
+        // test
+        assertThrows(IllegalArgumentException.class, () -> Prefs.savePassword(null, null));
+        assertThrows(IllegalArgumentException.class, () -> Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), null));
+        assertThrows(IllegalArgumentException.class, () -> Prefs.savePassword(null, "new Password"));
+        assertThrows(IllegalArgumentException.class, () -> Prefs.savePassword(null, ""));
+        assertThrows(IllegalArgumentException.class, () -> Prefs.savePassword(null, "\n\r"));
+    }
+
+    @Test
+    public void savePasswordWithoutData() {
+        // prepare
+        String newPassword = "NewPassword";
+
+        // test
+        Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), newPassword);
+
+        // assert
+        SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
+        String psswdHash = prefs.getString(KEY_COMMAND_PASSWORD, null);
+        byte[] salt = Base64.decode(prefs.getString(KEY_COMMAND_PASSWORD_SALT, null), Base64.NO_WRAP);
+        MessageDigest algorithm;
+        try {
+            algorithm = MessageDigest.getInstance("SHA-256");
+            algorithm.update(salt);
+            String expectedHash = Base64.encodeToString(algorithm.digest(newPassword.getBytes()), Base64.NO_WRAP);
+            assertThat(psswdHash).isEqualTo(expectedHash);
+            assertThat(salt).isNotEmpty();
+        } catch (NoSuchAlgorithmException ex) {
+            assertThat(false).isTrue(); // fail
+        }
+    }
+
+    @Test
+    public void savePaswordWithData() {
+        // prepare
+        String newPassword = "NewPassword";
+        Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password");
+
+        // test
+        Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), newPassword);
+
+        // assert
+        SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
+        String psswdHash = prefs.getString(KEY_COMMAND_PASSWORD, null);
+        byte[] salt = Base64.decode(prefs.getString(KEY_COMMAND_PASSWORD_SALT, null), Base64.NO_WRAP);
+        MessageDigest algorithm;
+        try {
+            algorithm = MessageDigest.getInstance("SHA-256");
+            algorithm.update(salt);
+            String expectedHash = Base64.encodeToString(algorithm.digest(newPassword.getBytes()), Base64.NO_WRAP);
+            assertThat(psswdHash).isEqualTo(expectedHash);
+        } catch (NoSuchAlgorithmException ex) {
+            assertThat(false).isTrue(); // fail
+        }
+    }
+
+    @Test
+    public void verifyApplicationPasswordWithInvalidValues() {
+        // test
+        assertThrows(IllegalArgumentException.class, () -> Prefs.verifyApplicationPassword(null, null));
+        assertThrows(IllegalArgumentException.class, () -> Prefs.verifyApplicationPassword(null, ""));
+    }
+
+    @Test
+    public void verifyApplicationPasswordWithoutExistingData() {
+        // test
+        assertThrows(OATApplicationException.class, () -> Prefs.verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password"));
+    }
+
+    @Test
+    public void verifyApplicationPasswordWithDataWithValidPassword() {
+        // prepare
+        String passwordToCheck = "Password";
+        Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
+
+        // test
+        boolean result = Prefs.verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
+
+        // assert
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    public void verifyApplicationPasswordWithDataWithInvalidPassword() {
+        // prepare
+        String passwordToCheck = "Password";
+        Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password1");
+
+        // test
+        boolean result = Prefs.verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
+
+        // assert
+        assertThat(result).isFalse();
+    }
+
+    // Trusted contacts
     @Test
     public void getAllTrustedContactsWithData() {
-        SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
-
         // prepare
+        SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
         Set<String> numbers = trustedContactsSetup();
 
         // test
@@ -131,6 +236,8 @@ public class PrefsDataTest {
         assertThat(load).isEqualTo(numbers);
         assertThat(result).isNull();
     }
+
+    // on startup permission request
 
     @Test
     public void addNewOnStartupPermissionRequestWithValidValueAndExistingData() {
