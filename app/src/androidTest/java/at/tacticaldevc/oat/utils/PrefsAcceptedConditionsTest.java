@@ -28,7 +28,7 @@ public class PrefsAcceptedConditionsTest {
     }
 
     @Test
-    public void testFetchConditionsAccepted() {
+    public void fetchConditionsAcceptedWithData() {
         // prepare
         Map<String, Boolean> setup = setup();
 
@@ -40,7 +40,7 @@ public class PrefsAcceptedConditionsTest {
     }
 
     @Test
-    public void testFetchConditionWithoutValues() {
+    public void fetchConditionWithoutValues() {
         // test
         Map<String, Boolean> result = fetchConditionsAccepted(InstrumentationRegistry.getInstrumentation().getTargetContext());
 
@@ -49,7 +49,7 @@ public class PrefsAcceptedConditionsTest {
     }
 
     @Test
-    public void testFetchConditionAccepted() {
+    public void fetchConditionAcceptedWithData() {
         // prepare
         Map<String, Boolean> setup = setup();
         String testedConditionName = "PHOTO_TRAP";
@@ -62,7 +62,7 @@ public class PrefsAcceptedConditionsTest {
     }
 
     @Test
-    public void testFetchConditionAcceptedWithNonExistentCondition() {
+    public void fetchConditionAcceptedWithNonExistentCondition() {
         // prepare
         setup();
         String testedCondition = "NEW_CONDITION";
@@ -75,7 +75,7 @@ public class PrefsAcceptedConditionsTest {
     }
 
     @Test
-    public void testFetchConditionAcceptedWithoutValues() {
+    public void fetchConditionAcceptedWithoutValues() {
         // prepare
         String testedCondition = "PHOTO_TRAP";
 
@@ -87,7 +87,7 @@ public class PrefsAcceptedConditionsTest {
     }
 
     @Test
-    public void testSaveConditionAcceptedUpdateValue() {
+    public void saveConditionAcceptedUpdateValue() {
         // prepare
         Map<String, Boolean> setup = setup();
         String testedCondition = "PHOTO_TRAP";
@@ -103,7 +103,7 @@ public class PrefsAcceptedConditionsTest {
     }
 
     @Test
-    public void testSaveConditionAcceptedSaveNewValue() {
+    public void saveConditionAcceptedSaveNewValue() {
         // prepare
         String testedCondition = "NEW_CONDITION";
 
@@ -116,7 +116,6 @@ public class PrefsAcceptedConditionsTest {
         assertThat(result).isTrue();
         assertThat(prefs.getBoolean(testedCondition, true)).isTrue();
     }
-
 
     @AfterEach
     public void tearDown() {

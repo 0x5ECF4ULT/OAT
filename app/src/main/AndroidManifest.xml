@@ -40,7 +40,8 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name="at.tacticaldevc.oat.modules.sms.SMSReciever"
+            android:name="at.tacticaldevc.oat.listeners.SMSListener"
+            android:exported="true"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />

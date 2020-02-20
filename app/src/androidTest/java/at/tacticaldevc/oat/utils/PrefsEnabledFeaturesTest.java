@@ -28,7 +28,7 @@ public class PrefsEnabledFeaturesTest {
     }
 
     @Test
-    public void testFetchFeaturesEnabled() {
+    public void fetchFeaturesEnabledWithData() {
         // prepare
         Map<String, Boolean> setup = setup();
 
@@ -40,7 +40,7 @@ public class PrefsEnabledFeaturesTest {
     }
 
     @Test
-    public void testFetchFeaturesEnabledWithoutValues() {
+    public void fetchFeaturesEnabledWithoutValues() {
         // test
         Map<String, Boolean> result = fetchFeaturesEnabled(InstrumentationRegistry.getInstrumentation().getTargetContext());
 
@@ -49,7 +49,7 @@ public class PrefsEnabledFeaturesTest {
     }
 
     @Test
-    public void testFetchFeatureEnabledStatus() {
+    public void fetchFeatureEnabledStatusWithData() {
         // prepare
         Map<String, Boolean> setup = setup();
         String testedFeatureName = "PHOTO_TRAP";
@@ -62,7 +62,7 @@ public class PrefsEnabledFeaturesTest {
     }
 
     @Test
-    public void testFetchFeatureEnabledStatusWithNonExistentFeature() {
+    public void fetchFeatureEnabledStatusWithNonExistentFeature() {
         // prepare
         setup();
         String testedFeatureName = "NEW_FEATURE";
@@ -75,7 +75,7 @@ public class PrefsEnabledFeaturesTest {
     }
 
     @Test
-    public void testFetchFeatureEnabledStatusWithoutValues() {
+    public void fetchFeatureEnabledStatusWithoutValues() {
         // prepare
         String testedFeatureName = "PHOTO_TRAP";
 
@@ -87,7 +87,7 @@ public class PrefsEnabledFeaturesTest {
     }
 
     @Test
-    public void testSaveFeatureEnabledStatusUpdateValue() {
+    public void saveFeatureEnabledStatusUpdateValue() {
         // prepare
         Map<String, Boolean> setup = setup();
         String testedFeatureName = "GPS_TRACKING_FINE";
@@ -103,7 +103,7 @@ public class PrefsEnabledFeaturesTest {
     }
 
     @Test
-    public void testSaveFeatureEnabledStatusSaveNewValue() {
+    public void saveFeatureEnabledStatusSaveNewValue() {
         // prepare
         String testedFeatureName = "NEW_FEATURE";
 
@@ -116,7 +116,6 @@ public class PrefsEnabledFeaturesTest {
         assertThat(result).isFalse();
         assertThat(prefs.getBoolean(testedFeatureName, true)).isFalse();
     }
-
 
     @AfterEach
     public void tearDown() {

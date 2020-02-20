@@ -195,8 +195,7 @@ public class PrefsDataTest {
         String result = fetchCommandTriggerWord(InstrumentationRegistry.getInstrumentation().getTargetContext());
 
         // assert
-        assertThat(result).isNotNull();
-        assertThat(result).isNotBlank();
+        assertThat(result).isEqualTo("oat");
     }
 
     @Test

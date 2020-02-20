@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class OATApplicationExceptionTest {
     @Test
-    void testForLibraryError() {
+    void forLibraryError() {
         // test
         OATApplicationException ex = OATApplicationException.forLibraryError("test library", new Exception("test Exception"));
         // assert
@@ -18,7 +18,7 @@ public class OATApplicationExceptionTest {
     }
 
     @Test
-    void testForNoPasswordSet() {
+    void forNoPasswordSet() {
         // test
         OATApplicationException ex = OATApplicationException.forNoPasswordSet();
         // assert

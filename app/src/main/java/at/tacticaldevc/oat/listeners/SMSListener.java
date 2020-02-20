@@ -29,7 +29,7 @@ public class SMSListener extends BroadcastReceiver {
 
             for (SmsMessage msg : Telephony.Sms.Intents.getMessagesFromIntent(intent)) {
                 if (contacts.contains(msg.getOriginatingAddress())) {
-                    String[] msgParts = msg.getMessageBody().split("\n");
+                    String[] msgParts = msg.getMessageBody().trim().toLowerCase().split(" ");
                     String triggerWord = Prefs.fetchCommandTriggerWord(context);
                     if (triggerWord.equals(msgParts[0]) && Prefs.verifyApplicationPassword(context, msgParts[2])) { // Message starts with trigger word and uses the correct password
                         dispatchToFeature(context, msg.getOriginatingAddress(), msgParts[1]);
