@@ -14,7 +14,7 @@ import static at.tacticaldevc.oat.utils.Ensurer.ensureStringIsValid;
 /**
  * A helper class for SMS communication
  *
- * @version 0.1
+ * @version 0.3
  */
 public class SMSCom {
 
@@ -48,6 +48,14 @@ public class SMSCom {
 
         SmsManager smsManager = fetchSMSManager();
         smsManager.sendTextMessage(phoneNumber, null, String.format(context.getString(R.string.oat_sms_message_error_feature_not_found), featureName), null, null);
+    }
+
+    public static void replyErrorSMS_InvalidPassword(Context context, String phoneNumber, String invalidPassword) {
+        ensureNotNull(context, "Application Context");
+        ensurePhoneNumberIsValid(phoneNumber, "phone number");
+
+        SmsManager smsManager = fetchSMSManager();
+        smsManager.sendTextMessage(phoneNumber, null, String.format(context.getString(R.string.oat_sms_message_error_invalid_password), invalidPassword), null, null);
     }
 
     /**

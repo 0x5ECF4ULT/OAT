@@ -31,8 +31,11 @@ public class SMSListener extends BroadcastReceiver {
                 if (contacts.contains(msg.getOriginatingAddress())) {
                     String[] msgParts = msg.getMessageBody().trim().toLowerCase().split(" ");
                     String triggerWord = Prefs.fetchCommandTriggerWord(context);
-                    if (triggerWord.equals(msgParts[0]) && Prefs.verifyApplicationPassword(context, msgParts[2])) { // Message starts with trigger word and uses the correct password
-                        dispatchToFeature(context, msg.getOriginatingAddress(), msgParts[1]);
+                    if (triggerWord.equals(msgParts[0])) { // Message starts with trigger word
+                        if (Prefs.verifyApplicationPassword(context, msgParts[2]))// user used the correct password
+                            dispatchToFeature(context, msg.getOriginatingAddress(), msgParts[1]);
+                        else
+                            SMSCom.replyErrorSMS_InvalidPassword(context, msg.getOriginatingAddress(), msgParts[2]);
                     }
                 }
             }
