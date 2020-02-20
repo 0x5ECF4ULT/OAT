@@ -36,6 +36,7 @@ public class Prefs {
     private final static String KEY_TRUSTED_CONTACTS = "trusted-contacts";
     private final static String KEY_COMMAND_PASSWORD = "password";
     private final static String KEY_COMMAND_PASSWORD_SALT = "pwdsalt";
+    private final static String KEY_COMMAND_TRIGGER = "cmd-trigger";
     private final static String KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP = "missing-permission";
 
     // Basic Data
@@ -108,6 +109,41 @@ public class Prefs {
         return Arrays.equals(Base64.decode(hash, Base64.NO_WRAP), hashToCheck);
     }
 
+    /**
+     * Saves a new Application trigger word
+     *
+     * @param context the Context of the Application
+     * @param trigger the new trigger word
+     * @return the saved trigger phrase
+     */
+    public static String saveCommandTriggerWord(Context context, String trigger) {
+        ensureNotNull(context, "Application Context");
+        ensureStringIsValid(trigger, "Application trigger");
+        if (trigger.contains(" "))
+            throw new IllegalArgumentException("trigger cannot contain ' '!");
+
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+
+        edit.putString(KEY_COMMAND_TRIGGER, trigger);
+
+        edit.apply();
+        return trigger;
+    }
+
+    /**
+     * Fetches the trigger word for commands issued to this application
+     *
+     * @param context the Context of the Application
+     * @return the trigger word or "oat" if no trigger word has been set
+     */
+    public static String fetchCommandTriggerWord(Context context) {
+        ensureNotNull(context, "Application Context");
+
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
+        return prefs.getString(KEY_COMMAND_TRIGGER, "oat");
+    }
+
     // Trusted Contacts
 
     /**
@@ -116,7 +152,7 @@ public class Prefs {
      * @param context the {@link Context} of the Application
      * @return A Set<String> with all trusted Contacts
      */
-    public static Set<String> getAllTrustedContacts(Context context) {
+    public static Set<String> fetchTrustedContacts(Context context) {
         ensureNotNull(context, "Application Context");
 
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
@@ -138,7 +174,7 @@ public class Prefs {
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        Set<String> numbers = getAllTrustedContacts(context);
+        Set<String> numbers = fetchTrustedContacts(context);
         numbers.add(phoneNumber);
 
         editor.putStringSet(KEY_TRUSTED_CONTACTS, numbers);
@@ -160,7 +196,7 @@ public class Prefs {
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        Set<String> phoneNumbers = getAllTrustedContacts(context);
+        Set<String> phoneNumbers = fetchTrustedContacts(context);
 
         if (phoneNumbers.contains(phoneNumber)) {
             phoneNumbers.remove(phoneNumber);

@@ -19,10 +19,14 @@ import at.tacticaldevc.oat.exceptions.OATApplicationException;
 
 import static at.tacticaldevc.oat.utils.Prefs.addNewOnStartupPermissionRequest;
 import static at.tacticaldevc.oat.utils.Prefs.addTrustedContact;
+import static at.tacticaldevc.oat.utils.Prefs.fetchCommandTriggerWord;
 import static at.tacticaldevc.oat.utils.Prefs.fetchOnStartupPermissionRequests;
-import static at.tacticaldevc.oat.utils.Prefs.getAllTrustedContacts;
+import static at.tacticaldevc.oat.utils.Prefs.fetchTrustedContacts;
 import static at.tacticaldevc.oat.utils.Prefs.removeOnStartupPermissionRequest;
 import static at.tacticaldevc.oat.utils.Prefs.removeTrustedContact;
+import static at.tacticaldevc.oat.utils.Prefs.saveCommandTriggerWord;
+import static at.tacticaldevc.oat.utils.Prefs.savePassword;
+import static at.tacticaldevc.oat.utils.Prefs.verifyApplicationPassword;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -32,6 +36,7 @@ public class PrefsDataTest {
     private final static String KEY_TRUSTED_CONTACTS = "trusted-contacts";
     private final static String KEY_COMMAND_PASSWORD = "password";
     private final static String KEY_COMMAND_PASSWORD_SALT = "pwdsalt";
+    private final static String KEY_COMMAND_TRIGGER = "cmd-trigger";
     private final static String KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP = "missing-permission";
 
     @Before
@@ -43,11 +48,11 @@ public class PrefsDataTest {
     @Test
     public void savePasswordWithInvalidValues() {
         // test
-        assertThrows(IllegalArgumentException.class, () -> Prefs.savePassword(null, null));
-        assertThrows(IllegalArgumentException.class, () -> Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), null));
-        assertThrows(IllegalArgumentException.class, () -> Prefs.savePassword(null, "new Password"));
-        assertThrows(IllegalArgumentException.class, () -> Prefs.savePassword(null, ""));
-        assertThrows(IllegalArgumentException.class, () -> Prefs.savePassword(null, "\n\r"));
+        assertThrows(IllegalArgumentException.class, () -> savePassword(null, null));
+        assertThrows(IllegalArgumentException.class, () -> savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), null));
+        assertThrows(IllegalArgumentException.class, () -> savePassword(null, "new Password"));
+        assertThrows(IllegalArgumentException.class, () -> savePassword(null, ""));
+        assertThrows(IllegalArgumentException.class, () -> savePassword(null, "\n\r"));
     }
 
     @Test
@@ -56,7 +61,7 @@ public class PrefsDataTest {
         String newPassword = "NewPassword";
 
         // test
-        Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), newPassword);
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), newPassword);
 
         // assert
         SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
@@ -78,10 +83,10 @@ public class PrefsDataTest {
     public void savePaswordWithData() {
         // prepare
         String newPassword = "NewPassword";
-        Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password");
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password");
 
         // test
-        Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), newPassword);
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), newPassword);
 
         // assert
         SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
@@ -101,24 +106,24 @@ public class PrefsDataTest {
     @Test
     public void verifyApplicationPasswordWithInvalidValues() {
         // test
-        assertThrows(IllegalArgumentException.class, () -> Prefs.verifyApplicationPassword(null, null));
-        assertThrows(IllegalArgumentException.class, () -> Prefs.verifyApplicationPassword(null, ""));
+        assertThrows(IllegalArgumentException.class, () -> verifyApplicationPassword(null, null));
+        assertThrows(IllegalArgumentException.class, () -> verifyApplicationPassword(null, ""));
     }
 
     @Test
     public void verifyApplicationPasswordWithoutExistingData() {
         // test
-        assertThrows(OATApplicationException.class, () -> Prefs.verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password"));
+        assertThrows(OATApplicationException.class, () -> verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password"));
     }
 
     @Test
     public void verifyApplicationPasswordWithDataWithValidPassword() {
         // prepare
         String passwordToCheck = "Password";
-        Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
 
         // test
-        boolean result = Prefs.verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
+        boolean result = verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
 
         // assert
         assertThat(result).isTrue();
@@ -128,13 +133,83 @@ public class PrefsDataTest {
     public void verifyApplicationPasswordWithDataWithInvalidPassword() {
         // prepare
         String passwordToCheck = "Password";
-        Prefs.savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password1");
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password1");
 
         // test
-        boolean result = Prefs.verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
+        boolean result = verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
 
         // assert
         assertThat(result).isFalse();
+    }
+
+    @Test
+    public void saveCommandTriggerWordWithInvalidValues() {
+        // test
+        assertThrows(IllegalArgumentException.class, () -> saveCommandTriggerWord(null, null));
+        assertThrows(IllegalArgumentException.class, () -> saveCommandTriggerWord(InstrumentationRegistry.getInstrumentation().getTargetContext(), null));
+        assertThrows(IllegalArgumentException.class, () -> saveCommandTriggerWord(null, "oat"));
+        assertThrows(IllegalArgumentException.class, () -> saveCommandTriggerWord(InstrumentationRegistry.getInstrumentation().getTargetContext(), "trigger phrase"));
+    }
+
+    @Test
+    public void saveCommandTriggerWordWithoutExistingData() {
+        // prepare
+        String trigger = "lockdown";
+
+        // test
+        String result = saveCommandTriggerWord(InstrumentationRegistry.getInstrumentation().getTargetContext(), trigger);
+
+        // assert
+        SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
+        String loaded = prefs.getString(KEY_COMMAND_TRIGGER, null);
+        assertThat(result).isSameAs(trigger);
+        assertThat(loaded).isEqualTo(trigger);
+    }
+
+    @Test
+    public void saveCommandTriggerWordWithData() {
+        // prepare
+        String trigger = "lockdown";
+        saveCommandTriggerWord(InstrumentationRegistry.getInstrumentation().getTargetContext(), "oat");
+
+        // test
+        String result = saveCommandTriggerWord(InstrumentationRegistry.getInstrumentation().getTargetContext(), trigger);
+
+        // assert
+        SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
+        String loaded = prefs.getString(KEY_COMMAND_TRIGGER, null);
+
+        assertThat(result).isSameAs(trigger);
+        assertThat(loaded).isEqualTo(result);
+    }
+
+    @Test
+    public void fetchCommandTriggerWordWithInvalidValues() {
+        // test
+        assertThrows(IllegalArgumentException.class, () -> fetchCommandTriggerWord(null));
+    }
+
+    @Test
+    public void fetchCommandTriggerWordWithoutExistingData() {
+        // test
+        String result = fetchCommandTriggerWord(InstrumentationRegistry.getInstrumentation().getTargetContext());
+
+        // assert
+        assertThat(result).isNotNull();
+        assertThat(result).isNotBlank();
+    }
+
+    @Test
+    public void fetchCommandTriggerWordWithExistingData() {
+        // prepare
+        String trigger = "trigger";
+        saveCommandTriggerWord(InstrumentationRegistry.getInstrumentation().getTargetContext(), trigger);
+
+        // test
+        String result = fetchCommandTriggerWord(InstrumentationRegistry.getInstrumentation().getTargetContext());
+
+        // assert
+        assertThat(result).isEqualTo(trigger);
     }
 
     // Trusted contacts
@@ -145,7 +220,7 @@ public class PrefsDataTest {
         Set<String> numbers = trustedContactsSetup();
 
         // test
-        Set<String> result = getAllTrustedContacts(InstrumentationRegistry.getInstrumentation().getTargetContext());
+        Set<String> result = fetchTrustedContacts(InstrumentationRegistry.getInstrumentation().getTargetContext());
 
         // assert
         assertThat(result).isEqualTo(numbers);
@@ -154,7 +229,7 @@ public class PrefsDataTest {
     @Test
     public void getAllTrustedContactsWithoutData() {
         // test
-        Set<String> result = getAllTrustedContacts(InstrumentationRegistry.getInstrumentation().getTargetContext());
+        Set<String> result = fetchTrustedContacts(InstrumentationRegistry.getInstrumentation().getTargetContext());
         // assert
         assertThat(result).isEmpty();
     }
