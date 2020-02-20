@@ -34,9 +34,13 @@ public class Tracking {
             // Location Listener
             GPSListenerSMS gpsListener = new GPSListenerSMS(context, phoneNumber);
 
+            // Check Location Accuracy
+            boolean fineAccuracy = Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_access_fine_location));
+
             // Criteria
             Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+            if (fineAccuracy) criteria.setAccuracy(Criteria.ACCURACY_FINE);
+            else criteria.setAccuracy(Criteria.ACCURACY_COARSE);
             criteria.setAltitudeRequired(false);
             criteria.setBearingRequired(false);
             criteria.setCostAllowed(true);
