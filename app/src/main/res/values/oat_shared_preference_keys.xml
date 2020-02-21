@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="oat_features_key_fetch_gps_position">fetch-gps-position</string>
+    <string name="oat_features_name_fetch_gps_position">fetch GPS-position</string>
+    <string name="oat_features_key_trigger_photo_trap">trigger_photo_trap</string>
+    <string name="oat_features_name_trigger_photo_trap">trigger photo trap</string>
+
+    <string name="oat_permissions_key_receive_sms">RECEIVE_SMS</string>
+    <string name="oat_permissions_key_send_sms">SEND_SMS</string>
+    <string name="oat_permissions_key_access_coarse_location">ACCESS_COARSE_LOCATION</string>
+    <string name="oat_permissions_key_access_fine_location">ACCESS_FINE_LOCATION</string>
+</resources>
