@@ -29,6 +29,7 @@ import static at.tacticaldevc.oat.utils.Prefs.savePassword;
 import static at.tacticaldevc.oat.utils.Prefs.verifyApplicationPassword;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 public class PrefsDataTest {
@@ -75,7 +76,7 @@ public class PrefsDataTest {
             assertThat(psswdHash).isEqualTo(expectedHash);
             assertThat(salt).isNotEmpty();
         } catch (NoSuchAlgorithmException ex) {
-            assertThat(false).isTrue(); // fail
+            fail();
         }
     }
 
@@ -99,7 +100,7 @@ public class PrefsDataTest {
             String expectedHash = Base64.encodeToString(algorithm.digest(newPassword.getBytes()), Base64.NO_WRAP);
             assertThat(psswdHash).isEqualTo(expectedHash);
         } catch (NoSuchAlgorithmException ex) {
-            assertThat(false).isTrue(); // fail
+            fail();
         }
     }
 
