@@ -94,7 +94,14 @@ public class Prefs {
 
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
 
-        String salt = prefs.getString(KEY_COMMAND_PASSWORD_SALT, "");
+        String salt = prefs.getString(KEY_COMMAND_PASSWORD_SALT, null);
+        if (salt == null) {
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.remove(KEY_COMMAND_PASSWORD);
+            edit.remove(KEY_COMMAND_PASSWORD_SALT);
+            edit.apply();
+            throw OATApplicationException.forCorruptedPasswordHash();
+        }
         MessageDigest algorithm;
         try {
             algorithm = MessageDigest.getInstance("SHA-256");
