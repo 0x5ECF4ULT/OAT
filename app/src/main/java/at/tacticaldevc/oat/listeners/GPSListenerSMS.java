@@ -41,7 +41,7 @@ public class GPSListenerSMS implements LocationListener {
     }
 
     /**
-     * Called when the User disables the Provider
+     * Called when the Provider is enabled
      * Not used
      *
      * @param provider the Provider
@@ -51,7 +51,7 @@ public class GPSListenerSMS implements LocationListener {
     }
 
     /**
-     * Called when the user enables the Provider
+     * Called when the Provider is disabled
      * Not used
      *
      * @param provider the Provider
