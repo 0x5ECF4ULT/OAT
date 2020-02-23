@@ -6,6 +6,7 @@ import android.telephony.SmsManager;
 import android.telephony.SubscriptionManager;
 
 import at.tacticaldevc.oat.R;
+import at.tacticaldevc.oat.exceptions.OATApplicationException;
 
 import static at.tacticaldevc.oat.utils.Ensurer.ensureNotNull;
 import static at.tacticaldevc.oat.utils.Ensurer.ensurePhoneNumberIsValid;
@@ -82,7 +83,6 @@ public class SMSCom {
         if (!(subscriptionID == SubscriptionManager.INVALID_SUBSCRIPTION_ID)) {
             return SmsManager.getSmsManagerForSubscriptionId(subscriptionID);
         }
-        // Error handling missing
-        return null;
+        throw OATApplicationException.forNoSMSSubscriptionFound();
     }
 }

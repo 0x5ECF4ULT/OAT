@@ -25,4 +25,13 @@ public class OATApplicationExceptionTest {
         assertThat(ex).isInstanceOf(OATApplicationException.class);
         assertThat(ex).hasMessage("No password has been set!");
     }
+
+    @Test
+    void forNoSMSSubscriptionFound() {
+        // test
+        OATApplicationException ex = OATApplicationException.forNoSMSSubscriptionFound();
+        // assert
+        assertThat(ex).isInstanceOf(OATApplicationException.class);
+        assertThat(ex).hasMessage("No Subscription could be obtained to send a SMS!");
+    }
 }
