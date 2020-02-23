@@ -44,10 +44,11 @@ public class Prefs {
     /**
      * Updates the Password used to send commands to the App
      *
-     * @param context  the Context of the Application
-     * @param password the new Password
+     * @param context     the Context of the Application
+     * @param password    the new Password
+     * @param oldPassword the old password, is ignored if no password was previously set
      */
-    public static void savePassword(Context context, String password) {
+    public static void savePassword(Context context, String password, String oldPassword) {
         ensureNotNull(context, "Application Context");
         ensureStringIsValid(password, "new User Password");
 
@@ -70,6 +71,14 @@ public class Prefs {
         } else {
             salt = Base64.decode(prefs.getString(KEY_COMMAND_PASSWORD_SALT, null), Base64.NO_WRAP);
         }
+
+        String loadedPassword = prefs.getString(KEY_COMMAND_PASSWORD, null);
+        if (loadedPassword != null) {
+            ensureStringIsValid(oldPassword, "old password");
+            if (!verifyApplicationPassword(context, oldPassword))
+                throw OATApplicationException.forPasswordMismatch();
+        }
+
         algorithm.update(salt);
         String hash = Base64.encodeToString(algorithm.digest(password.getBytes()), Base64.NO_WRAP);
 

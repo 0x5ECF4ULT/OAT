@@ -49,11 +49,11 @@ public class PrefsDataTest {
     @Test
     public void savePasswordWithInvalidValues() {
         // test
-        assertThrows(IllegalArgumentException.class, () -> savePassword(null, null));
-        assertThrows(IllegalArgumentException.class, () -> savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), null));
-        assertThrows(IllegalArgumentException.class, () -> savePassword(null, "new Password"));
-        assertThrows(IllegalArgumentException.class, () -> savePassword(null, ""));
-        assertThrows(IllegalArgumentException.class, () -> savePassword(null, "\n\r"));
+        assertThrows(IllegalArgumentException.class, () -> savePassword(null, null, null));
+        assertThrows(IllegalArgumentException.class, () -> savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), null, null));
+        assertThrows(IllegalArgumentException.class, () -> savePassword(null, "new Password", null));
+        assertThrows(IllegalArgumentException.class, () -> savePassword(null, "", null));
+        assertThrows(IllegalArgumentException.class, () -> savePassword(null, "\n\r", null));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class PrefsDataTest {
         String newPassword = "NewPassword";
 
         // test
-        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), newPassword);
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), newPassword, null);
 
         // assert
         SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
@@ -81,13 +81,13 @@ public class PrefsDataTest {
     }
 
     @Test
-    public void savePaswordWithData() {
+    public void savePasswordWithData() {
         // prepare
         String newPassword = "NewPassword";
-        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password");
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password", null);
 
         // test
-        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), newPassword);
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), newPassword, "Password");
 
         // assert
         SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
@@ -102,6 +102,15 @@ public class PrefsDataTest {
         } catch (NoSuchAlgorithmException ex) {
             fail();
         }
+    }
+
+    @Test
+    public void savePasswordWithInvalidOldPassword() {
+        // prepare
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password", null);
+
+        // assert
+        assertThrows(OATApplicationException.class, () -> savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "NewPassword", "InvalidPassword"));
     }
 
     @Test
@@ -121,7 +130,7 @@ public class PrefsDataTest {
     public void verifyApplicationPasswordWithDataWithValidPassword() {
         // prepare
         String passwordToCheck = "Password";
-        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck, null);
 
         // test
         boolean result = verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
@@ -134,13 +143,29 @@ public class PrefsDataTest {
     public void verifyApplicationPasswordWithDataWithInvalidPassword() {
         // prepare
         String passwordToCheck = "Password";
-        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password1");
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), "Password1", null);
 
         // test
         boolean result = verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), passwordToCheck);
 
         // assert
         assertThat(result).isFalse();
+    }
+
+    @Test
+    public void verifyApplicationPasswordWithCorruptedHash() {
+        // prepare
+        String password = "Password";
+        savePassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), password, null);
+        SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.remove(KEY_COMMAND_PASSWORD_SALT);
+        edit.apply();
+
+        // assert
+        assertThrows(OATApplicationException.class, () -> verifyApplicationPassword(InstrumentationRegistry.getInstrumentation().getTargetContext(), password));
+        assertThat(prefs.getString(KEY_COMMAND_PASSWORD, null)).isNull();
+        assertThat(prefs.getString(KEY_COMMAND_PASSWORD_SALT, null)).isNull();
     }
 
     @Test
