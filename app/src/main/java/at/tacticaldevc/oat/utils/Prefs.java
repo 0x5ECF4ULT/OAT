@@ -94,7 +94,14 @@ public class Prefs {
 
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
 
-        String salt = prefs.getString(KEY_COMMAND_PASSWORD_SALT, "");
+        String salt = prefs.getString(KEY_COMMAND_PASSWORD_SALT, null);
+        if (salt == null) {
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.remove(KEY_COMMAND_PASSWORD);
+            edit.remove(KEY_COMMAND_PASSWORD_SALT);
+            edit.apply();
+            throw OATApplicationException.forCorruptedPasswordHash();
+        }
         MessageDigest algorithm;
         try {
             algorithm = MessageDigest.getInstance("SHA-256");
@@ -228,6 +235,22 @@ public class Prefs {
             permissions.put(s, prefs.getBoolean(s, false));
         }
         return permissions;
+    }
+
+    /**
+     * Checks if a specific Permission was granted
+     *
+     * @param context the {@link Context} of the Application
+     * @param key     the key of the Permission to check
+     * @return if the Permission was granted, false no data could be found
+     */
+    public static boolean isPermissionGranted(Context context, String key) {
+        ensureNotNull(context, "Application Context");
+        ensureStringIsValid(key, "permission key");
+
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_PERMISSIONS, Context.MODE_PRIVATE);
+
+        return prefs.getBoolean(key, false);
     }
 
     /**

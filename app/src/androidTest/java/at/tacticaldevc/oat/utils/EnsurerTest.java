@@ -10,7 +10,7 @@ public class EnsurerTest {
 
 
     @Test
-    public void testEnsurePhoneNumberIsValidWithCorrectValues() {
+    public void ensurePhoneNumberIsValidWithCorrectValues() {
         String value1 = "+43 677 00000000";
         String value2 = "0664 677 00000000";
         // test
@@ -22,7 +22,7 @@ public class EnsurerTest {
     }
 
     @Test
-    public void testEnsurePhoneNumberIsValidWithIncorrectValues() {
+    public void ensurePhoneNumberIsValidWithIncorrectValues() {
         // prepare
         String value1 = "no phone number";
         String value2 = " ";

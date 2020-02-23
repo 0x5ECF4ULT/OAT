@@ -13,7 +13,7 @@ public class EnsurerTest {
 
     @ParameterizedTest(name = "`{0}`")
     @ValueSource(strings = {"object", "teststring", "1", " ", ""})
-    void testEnsureNotNullWithCorrectValues(Object object) {
+    void ensureNotNullWithCorrectValues(Object object) {
         // test
         Object result = ensureNotNull(object, "testValue");
 
@@ -22,14 +22,14 @@ public class EnsurerTest {
     }
 
     @Test
-    void testEnsureNotNullWithNullValues() {
+    void ensureNotNullWithNullValues() {
         assertThrows(IllegalArgumentException.class, () -> ensureNotNull(null, "testValue"));
         assertThrows(IllegalArgumentException.class, () -> ensureNotNull((String) null, "testValue"));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"string", "testString", "1"})
-    void testEnsureStringIsValidWithCorrectValues(String value) {
+    void ensureStringIsValidWithCorrectValues(String value) {
         // test
         String result = ensureStringIsValid(value, "testValue");
 
@@ -39,7 +39,7 @@ public class EnsurerTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "\n", "\r", "\n\r"})
-    void testEnsureStringIsValidWithIncorrectValues(String value) {
+    void ensureStringIsValidWithIncorrectValues(String value) {
         assertThrows(IllegalArgumentException.class, () -> ensureStringIsValid(value, "testValue"));
     }
 

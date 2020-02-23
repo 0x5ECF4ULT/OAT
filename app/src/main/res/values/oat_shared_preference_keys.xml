@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="oat_features_key_fetch_gps_position">fetch-gps-position</string>
+    <string name="oat_features_key_trigger_lockdown">lockdown</string>
+    <string name="oat_features_name_trigger_lockdown">lockdown</string>
+    <string name="oat_features_key_lift_lockdown">unlock</string>
+    <string name="oat_features_name_lift_lockdown">unlock</string>
+    <string name="oat_features_key_fetch_gps_position">fetch_gps_position</string>
     <string name="oat_features_name_fetch_gps_position">fetch GPS-position</string>
     <string name="oat_features_key_trigger_photo_trap">trigger_photo_trap</string>
     <string name="oat_features_name_trigger_photo_trap">trigger photo trap</string>
