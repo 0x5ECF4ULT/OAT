@@ -50,12 +50,12 @@ public class SMSCom {
         smsManager.sendTextMessage(phoneNumber, null, String.format(context.getString(R.string.oat_sms_message_error_feature_not_found), featureName), null, null);
     }
 
-    public static void replyErrorSMS_InvalidPassword(Context context, String phoneNumber, String invalidPassword) {
+    public static void replyErrorSMS_InvalidPassword(Context context, String phoneNumber) {
         ensureNotNull(context, "Application Context");
         ensurePhoneNumberIsValid(phoneNumber, "phone number");
 
         SmsManager smsManager = fetchSMSManager();
-        smsManager.sendTextMessage(phoneNumber, null, String.format(context.getString(R.string.oat_sms_message_error_invalid_password), invalidPassword), null, null);
+        smsManager.sendTextMessage(phoneNumber, null, String.format(context.getString(R.string.oat_sms_message_error_invalid_password)), null, null);
     }
 
     /**

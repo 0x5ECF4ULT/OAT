@@ -35,7 +35,7 @@ public class SMSListener extends BroadcastReceiver {
                         if (Prefs.verifyApplicationPassword(context, msgParts[2]))// user used the correct password
                             dispatchToFeature(context, msg.getOriginatingAddress(), msgParts[1]);
                         else
-                            SMSCom.replyErrorSMS_InvalidPassword(context, msg.getOriginatingAddress(), msgParts[2]);
+                            SMSCom.replyErrorSMS_InvalidPassword(context, msg.getOriginatingAddress());
                     }
                 }
             }
