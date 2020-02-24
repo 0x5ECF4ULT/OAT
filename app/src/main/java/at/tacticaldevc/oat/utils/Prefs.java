@@ -33,7 +33,7 @@ public class Prefs {
     private final static String DOCUMENT_NAME_PERMISSIONS = "oat-permissions";
     private final static String DOCUMENT_NAME_ENABLED_FEATURES = "oat-enabled-features";
     private final static String DOCUMENT_NAME_ACCEPTED_CONDITIONS = "oat-accepted-conditions";
-    private final static String KEY_TRUSTED_CONTACTS = "trusted-contacts";
+    private final static String DOCUMENT_NAME_TRUSTED_CONTACTS = "oat-trusted-contacts";
     private final static String KEY_COMMAND_PASSWORD = "password";
     private final static String KEY_COMMAND_PASSWORD_SALT = "pwdsalt";
     private final static String KEY_COMMAND_TRIGGER = "cmd-trigger";
@@ -166,61 +166,58 @@ public class Prefs {
      * Returns all trusted contacts
      *
      * @param context the {@link Context} of the Application
-     * @return A Set<String> with all trusted Contacts
+     * @return A {@link Map} <String,String> containing the phone number and name of all trusted contacts
      */
-    public static Set<String> fetchTrustedContacts(Context context) {
+    public static Map<String, String> fetchTrustedContacts(Context context) {
         ensureNotNull(context, "Application Context");
 
-        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
-        return prefs.getStringSet(KEY_TRUSTED_CONTACTS, new HashSet<>());
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_TRUSTED_CONTACTS, Context.MODE_PRIVATE);
+        Set<String> keys = prefs.getAll().keySet();
+        Map<String, String> result = new HashMap<>();
+        for (String key : keys) {
+            result.put(key, prefs.getString(key, null));
+        }
+        return result;
     }
 
     /**
-     * Adds a new trusted contact
+     * Saves a trusted contact
      *
      * @param context     the {@link Context} of the Application
      * @param phoneNumber the phone number to be added
-     * @return
+     * @return the saved phone number
      * @throws IllegalArgumentException if phone number is 0 or smaller
      */
-    public static String addTrustedContact(Context context, String phoneNumber) {
+    public static String saveTrustedContact(Context context, String phoneNumber, String name) {
         ensureNotNull(context, "Application Context");
         ensurePhoneNumberIsValid(phoneNumber, "new trusted contact");
+        ensureStringIsValid(name, "trusted contact name");
 
-        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_TRUSTED_CONTACTS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        Set<String> numbers = fetchTrustedContacts(context);
-        numbers.add(phoneNumber);
-
-        editor.putStringSet(KEY_TRUSTED_CONTACTS, numbers);
+        editor.putString(phoneNumber, name);
         editor.apply();
         return phoneNumber;
     }
 
     /**
-     * Removes an existing trusted contact
+     * deletes an existing trusted contact
      *
      * @param context     the {@link Context} of the Application
-     * @param phoneNumber the phone number to be removed
-     * @return the removed Trusted Contact if removal was successful or null if it wasn't
+     * @param phoneNumber the phone number of the contact to be removed
+     * @return the phone number of the deleted trusted contact
      */
-    public static String removeTrustedContact(Context context, String phoneNumber) {
+    public static String deleteTrustedContact(Context context, String phoneNumber) {
         ensureNotNull(context, "Application Context");
         ensureStringIsValid(phoneNumber, "phone number");
 
-        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_TRUSTED_CONTACTS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        Set<String> phoneNumbers = fetchTrustedContacts(context);
-
-        if (phoneNumbers.contains(phoneNumber)) {
-            phoneNumbers.remove(phoneNumber);
-            editor.putStringSet(KEY_TRUSTED_CONTACTS, phoneNumbers);
-            editor.apply();
-            return phoneNumber;
-        }
-        return null;
+        editor.remove(phoneNumber);
+        editor.apply();
+        return phoneNumber;
     }
 
 
