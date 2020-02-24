@@ -26,7 +26,7 @@ import static at.tacticaldevc.oat.utils.Ensurer.ensureNotNull;
  * A helper class for the camera
  */
 public class Cam {
-    public static CameraCharacteristics CHARACTERISTICS;
+    public static CameraCharacteristics characteristics;
     private static CameraManager cm = null;
     private static CameraDevice cam;
     private static CaptureRequest cr;
@@ -118,7 +118,7 @@ public class Cam {
         public void onOpened(@NonNull CameraDevice camera) {
             cam = camera;
             try {
-                CHARACTERISTICS = cm.getCameraCharacteristics(cam.getId());
+                characteristics = cm.getCameraCharacteristics(cam.getId());
             } catch (CameraAccessException e) {
                 throw OATApplicationException.forLibraryError("Camera2", e);
             }
@@ -127,7 +127,7 @@ public class Cam {
         @Override
         public void onDisconnected(@NonNull CameraDevice camera) {
             ir = null;
-            CHARACTERISTICS = null;
+            characteristics = null;
             ccs = null;
             cr = null;
             cam = null;
