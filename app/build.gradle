@@ -14,7 +14,7 @@ android {
     }
 
     // Workaround to Error "More than one file was found with OS independent path 'META-INF/LICENSE.md'" and "More than one file was found with OS independent path 'META-INF/LICENSE-notice.md'"
-    packagingOptions{
+    packagingOptions {
         exclude('META-INF/LICENSE.md')
         exclude('META-INF/LICENSE-notice.md')
     }
@@ -48,4 +48,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'org.assertj:assertj-core:3.11.1'
     androidTestImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.2'
+
+    //noinspection GradleCompatible,GradleCompatible
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
 }

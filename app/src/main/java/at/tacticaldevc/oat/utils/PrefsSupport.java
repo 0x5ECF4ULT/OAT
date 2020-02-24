@@ -2,6 +2,7 @@ package at.tacticaldevc.oat.utils;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public class PrefsSupport {
     public static Set<Contact> toContactSet(Map<String, String> contactMap) {
         ensureNotNull(contactMap, "contact Map");
 
-        Set<Contact> result = new HashSet<>();
+        Set<Contact> result = new LinkedHashSet<>();
         for (String key : contactMap.keySet()) {
             result.add(new Contact(contactMap.get(key), key));
         }
