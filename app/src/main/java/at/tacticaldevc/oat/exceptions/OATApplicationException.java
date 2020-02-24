@@ -44,10 +44,6 @@ public class OATApplicationException extends RuntimeException {
     public static OATApplicationException forOther(String name, String msg, Exception e) {
         return new OATApplicationException(name + " has thrown an unknown Exception: " + msg, e);
     }
-  
-    public static OATApplicationException forLibraryError(String library, Exception thrownException) {
-        return new OATApplicationException("The following library seems to no longer support a required feature: " + library, thrownException);
-    }
 
     public static OATApplicationException forNoSMSSubscriptionFound() {
         return new OATApplicationException("No Subscription could be obtained to send a SMS!");
