@@ -135,7 +135,7 @@ public class Cam {
 
         @Override
         public void onError(@NonNull CameraDevice camera, int error) {
-
+            throw OATApplicationException.forOther("Camera2", "StateCallBackListener.onError() returned " + error);
         }
     }
 
@@ -150,7 +150,7 @@ public class Cam {
 
         @Override
         public void onConfigureFailed(@NonNull CameraCaptureSession session) {
-            // Seems like something's wrong
+            throw OATApplicationException.forOther("Camera2", "CameraCaptureSessionStateCallbackListener.onConfigureFailed()");
         }
     }
 }
