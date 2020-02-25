@@ -185,8 +185,8 @@ public class Prefs {
      *
      * @param context     the {@link Context} of the Application
      * @param phoneNumber the phone number to be added
-     * @return the saved phone number
-     * @throws IllegalArgumentException if phone number is 0 or smaller
+     * @return the saved trusted contact
+     * @throws IllegalArgumentException if context is null, phone number is invalid or name is invalid (see {@link Ensurer})
      */
     public static String saveTrustedContact(Context context, String phoneNumber, String name) {
         ensureNotNull(context, "Application Context");
@@ -219,7 +219,6 @@ public class Prefs {
         editor.apply();
         return phoneNumber;
     }
-
 
     // Permissions
 
@@ -287,7 +286,6 @@ public class Prefs {
         editor.apply();
         return permissions;
     }
-
 
     // Enabled Features
 
