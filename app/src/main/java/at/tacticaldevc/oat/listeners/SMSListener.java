@@ -18,14 +18,14 @@ import at.tacticaldevc.oat.utils.Tracking;
  * <trigger-word> <feature> <password>
  * where trigger-word is the trigger that was configured (defaults to "oat"), feature is the feature to be activated/deactivated and password is the password that was configured
  *
- * @version 0.1
+ * @version 0.2
  */
 public class SMSListener extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(intent.getAction())) {
-            // Fetch trusted Contacts
-            Set<String> contacts = Prefs.fetchTrustedContacts(context);
+            // Fetch trusted Contacts (phone numbers only)
+            Set<String> contacts = Prefs.fetchTrustedContacts(context).keySet();
 
             for (SmsMessage msg : Telephony.Sms.Intents.getMessagesFromIntent(intent)) {
                 if (contacts.contains(msg.getOriginatingAddress())) {
