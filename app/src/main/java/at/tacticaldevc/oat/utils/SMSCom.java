@@ -15,12 +15,12 @@ import static at.tacticaldevc.oat.utils.Ensurer.ensureStringIsValid;
 /**
  * A helper class for SMS communication
  *
- * @version 0.3
+ * @version 0.4
  */
 public class SMSCom {
 
     /**
-     * Send a reply to let the User know, that a certain feature was not enabled
+     * Reply that the feature is disabled
      *
      * @param context     the {@link Context} of the Application
      * @param phoneNumber the phone number that requested the feature to be activated
@@ -32,11 +32,12 @@ public class SMSCom {
         ensureStringIsValid(featureName, "name of disabled feature");
 
         SmsManager smsManager = fetchSMSManager();
+        sendDeletePasswordHint(context, phoneNumber, smsManager);
         smsManager.sendTextMessage(phoneNumber, null, String.format(context.getString(R.string.oat_sms_message_error_feature_disabled), featureName), null, null);
     }
 
     /**
-     * Send a reply to let the User know, that the requested feature does not exist
+     * Reply that the requested feature does not exist
      *
      * @param context     the {@link Context} of the Application
      * @param phoneNumber the phone number that requested the non-existent feature
@@ -48,9 +49,16 @@ public class SMSCom {
         ensureStringIsValid(featureName, "feature name");
 
         SmsManager smsManager = fetchSMSManager();
+        sendDeletePasswordHint(context, phoneNumber, smsManager);
         smsManager.sendTextMessage(phoneNumber, null, String.format(context.getString(R.string.oat_sms_message_error_feature_not_found), featureName), null, null);
     }
 
+    /**
+     * Reply that an invalid password was provided
+     *
+     * @param context     the {@link Context} of the Application
+     * @param phoneNumber the phone number to send the reply to
+     */
     public static void replyErrorSMS_InvalidPassword(Context context, String phoneNumber) {
         ensureNotNull(context, "Application Context");
         ensurePhoneNumberIsValid(phoneNumber, "phone number");
@@ -72,7 +80,38 @@ public class SMSCom {
         ensureNotNull(location, "current location");
 
         SmsManager smsManager = fetchSMSManager();
+        sendDeletePasswordHint(context, phoneNumber, smsManager);
         smsManager.sendTextMessage(phoneNumber, null, String.format(context.getString(R.string.oat_sms_message_send_gps_position), location.getLatitude(), location.getLongitude()), null, null);
+    }
+
+    /**
+     * Reply with a confirmation, that the device is now under lockdown
+     *
+     * @param context     the {@link Context} of the Application
+     * @param phoneNumber the target phone number
+     */
+    public static void replyDeviceLocked(Context context, String phoneNumber) {
+        ensureNotNull(context, "Application Context");
+        ensurePhoneNumberIsValid(phoneNumber, "target phone number");
+
+        SmsManager smsManager = fetchSMSManager();
+        sendDeletePasswordHint(context, phoneNumber, smsManager);
+        smsManager.sendTextMessage(phoneNumber, null, context.getString(R.string.oat_sms_message_send_lockdown_triggered), null, null);
+    }
+
+    /**
+     * Reply with a confirmation, that the device is now unlocked
+     *
+     * @param context     the {@link Context} of the Application
+     * @param phoneNumber the target phone number
+     */
+    public static void replyDeviceUnlocked(Context context, String phoneNumber) {
+        ensureNotNull(context, "Application Context");
+        ensurePhoneNumberIsValid(phoneNumber, "target phone number");
+
+        SmsManager smsManager = fetchSMSManager();
+        sendDeletePasswordHint(context, phoneNumber, smsManager);
+        smsManager.sendTextMessage(phoneNumber, null, context.getString(R.string.oat_sms_message_send_lockdown_lifted), null, null);
     }
 
     /**
@@ -84,5 +123,16 @@ public class SMSCom {
             return SmsManager.getSmsManagerForSubscriptionId(subscriptionID);
         }
         throw OATApplicationException.forNoSMSSubscriptionFound();
+    }
+
+    /**
+     * Sends the default Message to remind the users that they should delete the message containing their password
+     *
+     * @param context     the {@link Context} of the Application
+     * @param phoneNumber the target phone number
+     * @param smsManager  the {@link SmsManager} to be used
+     */
+    private static void sendDeletePasswordHint(Context context, String phoneNumber, SmsManager smsManager) {
+        smsManager.sendTextMessage(phoneNumber, null, context.getString(R.string.oat_sms_message_hint_delete_password), null, null);
     }
 }

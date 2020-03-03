@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="oat_sms_message_error_feature_disabled">OAT: \n The feature %s is disabled and cannot be accessed at the moment. Enable this feature in the settings of the App.\n IMPORTANT: Delete the message above to keep your password secret!</string>
-    <string name="oat_sms_message_error_feature_not_found">OAT: \n The requested feature %s does not exist. Ensure that you typed the name correctly.\n IMPORTANT: Delete the message above to keep your password secret!</string>
-    <string name="oat_sms_message_send_gps_position">OAT: \n The device is currently located at the following coordinates: %f,%f\n IMPORTANT: Delete the message above to keep your password secret!</string>
-    <string name="oat_sms_message_error_invalid_password">OAT: Invalid password! Ensure that you typed the password correctly.</string>
+    <string name="oat_sms_message_error_feature_disabled">OAT: \nThe feature %s is disabled and cannot be accessed at the moment. Enable this feature in the settings of the App.</string>
+    <string name="oat_sms_message_error_invalid_password">OAT: \nInvalid password! Ensure that you typed the password correctly.</string>
+    <string name="oat_sms_message_error_feature_not_found">OAT: \nThe requested feature %s does not exist. Ensure that you typed the name correctly.</string>
+    <string name="oat_sms_message_send_gps_position">OAT: \nThe device is currently located at the following coordinates: %f,%f</string>
+    <string name="oat_sms_message_send_lockdown_triggered">OAT: \nThe device is now under lockdown. Trigger the unlock - feature from any trusted Contact to unlock your phone.</string>
+    <string name="oat_sms_message_send_lockdown_lifted">OAT: \nThe device is now unlocked.</string>
+    <string name="oat_sms_message_hint_delete_password">OAT: \nIMPORTANT: Delete the message above to keep your password secret!</string>
 </resources>

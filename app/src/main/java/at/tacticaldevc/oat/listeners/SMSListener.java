@@ -18,7 +18,7 @@ import at.tacticaldevc.oat.utils.Tracking;
  * <trigger-word> <feature> <password>
  * where trigger-word is the trigger that was configured (defaults to "oat"), feature is the feature to be activated/deactivated and password is the password that was configured
  *
- * @version 0.2
+ * @version 0.3
  */
 public class SMSListener extends BroadcastReceiver {
     @Override
@@ -44,12 +44,16 @@ public class SMSListener extends BroadcastReceiver {
 
     private void dispatchToFeature(Context context, String phoneNumber, String feature) {
         switch (feature) {
+            case "lock":
             case "lockdown":
                 // dispatch to lockdown
+                SMSCom.replyDeviceLocked(context, phoneNumber);
                 break;
             case "unlock":
                 // dispatch to unlock
+                SMSCom.replyDeviceUnlocked(context, phoneNumber);
                 break;
+            case "location":
             case "position":
                 Tracking.sendCurrentCoordinatesViaSMS(context, phoneNumber, null);
                 break;
