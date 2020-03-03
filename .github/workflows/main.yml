@@ -1,0 +1,16 @@
+name: CI
+
+on:
+  pull_request:
+    types: opened
+jobs:
+  automerge:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Merge Pull Request
+        uses: devmasx/merge-branch@v1.1.0
+        with:
+          type: now
+          target_branch: prototype
+        env: 
+          GITHUB_TOKEN: ${{secrets.GH_TOKEN}}
