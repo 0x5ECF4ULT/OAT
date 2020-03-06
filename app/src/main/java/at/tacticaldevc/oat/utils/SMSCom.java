@@ -2,6 +2,7 @@ package at.tacticaldevc.oat.utils;
 
 import android.content.Context;
 import android.location.Location;
+import android.net.Uri;
 import android.telephony.SmsManager;
 import android.telephony.SubscriptionManager;
 
@@ -112,6 +113,24 @@ public class SMSCom {
         SmsManager smsManager = fetchSMSManager();
         sendDeletePasswordHint(context, phoneNumber, smsManager);
         smsManager.sendTextMessage(phoneNumber, null, context.getString(R.string.oat_sms_message_send_lockdown_lifted), null, null);
+    }
+
+    /**
+     * Send the picture that was taken
+     *
+     * @param context     the {@link Context} of the Application
+     * @param phoneNumber the target phone number
+     * @param imageUri    the {@link Uri} of the picture to be sent
+     */
+    public static void replyPhotoTaken(Context context, String phoneNumber, Uri imageUri) {
+        ensureNotNull(context, "Application Context");
+        ensurePhoneNumberIsValid(phoneNumber, "phoneNumber");
+        ensureNotNull(imageUri, "the URI of the image taken by the photo trap");
+
+        SmsManager smsManager = fetchSMSManager();
+        sendDeletePasswordHint(context, phoneNumber, smsManager);
+        smsManager.sendTextMessage(phoneNumber, null, context.getString(R.string.oat_sms_message_send_photo_trap_triggered), null, null);
+        smsManager.sendMultimediaMessage(context, imageUri, phoneNumber, null, null);
     }
 
     /**

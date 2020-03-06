@@ -6,5 +6,6 @@
     <string name="oat_sms_message_send_gps_position">OAT: \nThe device is currently located at the following coordinates: %f,%f</string>
     <string name="oat_sms_message_send_lockdown_triggered">OAT: \nThe device is now under lockdown. Trigger the unlock - feature from any trusted Contact to unlock your phone.</string>
     <string name="oat_sms_message_send_lockdown_lifted">OAT: \nThe device is now unlocked.</string>
+    <string name="oat_sms_message_send_photo_trap_triggered">OAT: \nThe photo trap was triggered.</string>
     <string name="oat_sms_message_hint_delete_password">OAT: \nIMPORTANT: Delete the message above to keep your password secret!</string>
 </resources>

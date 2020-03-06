@@ -3,6 +3,7 @@ package at.tacticaldevc.oat.listeners;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
 
@@ -59,6 +60,8 @@ public class SMSListener extends BroadcastReceiver {
                 break;
             case "photo-trap":
                 // dispatch to photo trap
+                Uri uri = Uri.EMPTY; // change to URI of taken picture
+                SMSCom.replyPhotoTaken(context, phoneNumber, uri);
                 break;
             default:
                 SMSCom.replyErrorSMS_FeatureNotFound(context, phoneNumber, feature);
