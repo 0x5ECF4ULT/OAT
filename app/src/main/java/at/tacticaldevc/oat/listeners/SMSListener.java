@@ -61,7 +61,7 @@ public class SMSListener extends BroadcastReceiver {
             case "photo-trap":
                 // dispatch to photo trap
                 Uri uri = Uri.EMPTY; // change to URI of taken picture
-                SMSCom.replyPhotoTaken(context, phoneNumber, uri);
+                //SMSCom.replyPhotoTaken(context, phoneNumber, uri); // Uncomment when implemented
                 break;
             default:
                 SMSCom.replyErrorSMS_FeatureNotFound(context, phoneNumber, feature);
