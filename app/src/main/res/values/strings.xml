@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">OAT</string>
-    <string name="title_home">Home</string>
+    <string name="title_home">Main Settings</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="password_settings">Password Settings</string>
+    <string name="trusted_numbers">Trusted Numbers</string>
+    <string name="feature_page">Feature Page</string>
 </resources>
