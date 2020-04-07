@@ -11,11 +11,18 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Size;
 
 import androidx.annotation.NonNull;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 
 import at.tacticaldevc.oat.exceptions.OATApplicationException;
@@ -26,18 +33,12 @@ import static at.tacticaldevc.oat.utils.Ensurer.ensureNotNull;
  * A helper class for the camera
  */
 public class Cam {
-    public static CameraCharacteristics characteristics;
     private static CameraManager cm = null;
     private static CameraDevice cam;
     private static CaptureRequest cr;
-    private static CameraCaptureSession ccs;
-
-    private static ImageReader ir;
-
-    private static boolean green_light;
 
     /**
-     * Initializes the Camera API. If it fails an Exception is raised
+     * Initializes the Camera API. If it fails an Exception is raised. This is the first method to be called.
      *
      * @throws at.tacticaldevc.oat.exceptions.OATApplicationException in case the camera could not be connected
      */
@@ -61,7 +62,7 @@ public class Cam {
 
 
     /**
-     * Initializes the opened camera. This method should be called instantly after Cam.init()
+     * Initializes the opened camera. This method should be called after Cam.init()
      *
      * @param characteristics the characteristics to use
      */
@@ -77,7 +78,7 @@ public class Cam {
         Size[] sizes = map.getOutputSizes(chosenFormat);
         Arrays.sort(sizes, (a, b) -> Integer.compare(a.getWidth(), b.getWidth()));
 
-        ir = ImageReader.newInstance(sizes[0].getWidth(), sizes[0].getHeight(), chosenFormat, 1);
+        ImageReader ir = ImageReader.newInstance(sizes[0].getWidth(), sizes[0].getHeight(), chosenFormat, 1);
         CaptureRequest.Builder crb;
         try {
             crb = cam.createCaptureRequest(CameraDevice.TEMPLATE_ZERO_SHUTTER_LAG);
@@ -93,22 +94,44 @@ public class Cam {
 
     /**
      * If the camera has been opened and configured call this method to take a picture
-     * @return Image object to process further
+     *
+     * @return Image object representation or null if a camera session could not be acquired
      */
-    public static Image takePicture() {
-        while (!green_light) {
-        }
+    private static void takePicture(CameraCaptureSession ccs) {
         try {
             ccs.capture(cr, null, null);
         } catch (CameraAccessException e) {
             throw OATApplicationException.forLibraryError("Camera2", e);
         }
-        return ir.acquireLatestImage();
+    }
+
+    private static Uri saveImage(ImageReader reader) {
+        Image image = reader.acquireLatestImage();
+        ByteBuffer buf = image.getPlanes()[0].getBuffer();
+        byte[] bytes = new byte[buf.capacity()];
+        buf.get(bytes);
+
+        try {
+            File f = new File(Environment.getExternalStorageDirectory() + String.format("/cap_%S.jpg", Calendar.getInstance().getTime()));
+            FileOutputStream fos = new FileOutputStream(f);
+            f.createNewFile();
+
+            fos.write(bytes);
+            fos.flush();
+            fos.close();
+
+            return Uri.fromFile(f);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static void sendImage(Uri imageUri) {
+
     }
 
     public static void close() {
-        ir.close();
-        ccs.close();
         cam.close();
     }
 
@@ -118,7 +141,8 @@ public class Cam {
         public void onOpened(@NonNull CameraDevice camera) {
             cam = camera;
             try {
-                characteristics = cm.getCameraCharacteristics(cam.getId());
+                CameraCharacteristics characteristics = cm.getCameraCharacteristics(cam.getId());
+                configure(characteristics);
             } catch (CameraAccessException e) {
                 throw OATApplicationException.forLibraryError("Camera2", e);
             }
@@ -126,9 +150,6 @@ public class Cam {
 
         @Override
         public void onDisconnected(@NonNull CameraDevice camera) {
-            ir = null;
-            characteristics = null;
-            ccs = null;
             cr = null;
             cam = null;
         }
@@ -143,14 +164,23 @@ public class Cam {
 
         @Override
         public void onConfigured(@NonNull CameraCaptureSession session) {
-            // Well guys we did it!
-            ccs = session;
-            green_light = true;
+            takePicture(session);
+
+            session.close();
         }
 
         @Override
         public void onConfigureFailed(@NonNull CameraCaptureSession session) {
             throw OATApplicationException.forOther("Camera2", "CameraCaptureSessionStateCallbackListener.onConfigureFailed()");
+        }
+    }
+
+    private static class ImageReaderPictureAvailableCallback implements ImageReader.OnImageAvailableListener {
+
+        @Override
+        public void onImageAvailable(ImageReader reader) {
+            Uri imageUri = saveImage(reader);
+            sendImage(imageUri);
         }
     }
 }
