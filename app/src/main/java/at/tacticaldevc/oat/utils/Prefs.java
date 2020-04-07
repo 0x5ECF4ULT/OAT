@@ -60,7 +60,7 @@ public class Prefs {
         try {
             algorithm = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException ex) {
-            throw OATApplicationException.forLibraryError("MessageDigest", ex);
+            throw OATApplicationException.forLibraryDeprecatedError("MessageDigest", ex);
         }
 
         if (prefs.getString(KEY_COMMAND_PASSWORD_SALT, null) == null) {
@@ -115,7 +115,7 @@ public class Prefs {
         try {
             algorithm = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException ex) {
-            throw OATApplicationException.forLibraryError("MessageDigest", ex);
+            throw OATApplicationException.forLibraryDeprecatedError("MessageDigest", ex);
         }
         algorithm.update(Base64.decode(salt, Base64.NO_WRAP));
         byte[] hashToCheck = algorithm.digest(passwordToCheck.getBytes());

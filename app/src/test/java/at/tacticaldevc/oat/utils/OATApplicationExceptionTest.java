@@ -10,7 +10,7 @@ public class OATApplicationExceptionTest {
     @Test
     void forLibraryError() {
         // test
-        OATApplicationException ex = OATApplicationException.forLibraryError("test library", new Exception("test Exception"));
+        OATApplicationException ex = OATApplicationException.forLibraryDeprecatedError("test library", new Exception("test Exception"));
         // assert
         assertThat(ex).isInstanceOf(OATApplicationException.class);
         assertThat(ex.getMessage()).contains("test library");
