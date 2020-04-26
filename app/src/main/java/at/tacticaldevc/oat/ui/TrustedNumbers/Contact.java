@@ -12,7 +12,7 @@ public class Contact {
     private String name, number;
 
     public Contact(String name, String number) {
-        ensureStringIsValid(name, "name");
+        ensureStringIsValid(name, name);
         ensurePhoneNumberIsValid(number, number);
         this.name = name;
         this.number = number;

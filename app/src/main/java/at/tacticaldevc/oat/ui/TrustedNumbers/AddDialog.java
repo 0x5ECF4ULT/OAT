@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import at.tacticaldevc.oat.R;
 import at.tacticaldevc.oat.utils.Ensurer;
 import at.tacticaldevc.oat.utils.Prefs;
+import at.tacticaldevc.oat.utils.PrefsSupport;
 
 public class AddDialog extends AppCompatDialogFragment {
     private EditText number;
@@ -37,17 +38,19 @@ public class AddDialog extends AppCompatDialogFragment {
 
         builder.setView(view)
                 .setTitle("Add Trusted Number")
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 })
-                .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if(Ensurer.ensurePhoneNumberIsValid(number.getText().toString(), name.getText().toString()).equals(number.getText().toString())){
                             Prefs.saveTrustedContact(getContext(), number.getText().toString(), name.getText().toString());
+                            ca.list.clear();
+                            ca.list.addAll(PrefsSupport.toContactSet(Prefs.fetchTrustedContacts(getContext())));
                         }
                         else {
 

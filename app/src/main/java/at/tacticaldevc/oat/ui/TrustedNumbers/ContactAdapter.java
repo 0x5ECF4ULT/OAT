@@ -71,8 +71,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactI
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            int ind = 0;
+                            for(Contact c: list){
+                                if(c.getNumber() == number.getText().toString()) {
+                                    ind = list.indexOf(c);
+                                    list.remove(ind);
+                                }
+                            }
                             Prefs.deleteTrustedContact(view.getContext(), number.getText().toString());
-                            //notifyDataSetChanged();
+                            notifyItemRemoved(ind);
                         }
                     })
                     .setNegativeButton("Cancel",null)
