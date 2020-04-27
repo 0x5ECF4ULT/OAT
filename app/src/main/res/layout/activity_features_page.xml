@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.FeaturePage.FeaturesPageActivity">
+
+    <TextView
+        android:id="@+id/text_home2"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:backgroundTint="#00000000"
+        android:fontFamily="sans-serif-black"
+        android:foregroundTint="#00000000"
+        android:gravity="center"
+        android:scrollbarSize="0dp"
+        android:text="@string/feature_page"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:padding="180dp"
+        android:text="@string/feature_page"
+        app:layout_constraintTop_toBottomOf="@+id/testbutton"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/testbutton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TestButton"
+        app:layout_constraintTop_toBottomOf="@+id/text_home2"
+        android:layout_marginTop="20dp"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
