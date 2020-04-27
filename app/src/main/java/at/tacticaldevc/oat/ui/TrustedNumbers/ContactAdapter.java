@@ -75,9 +75,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactI
                             for(Contact c: list){
                                 if(c.getNumber() == number.getText().toString()) {
                                     ind = list.indexOf(c);
-                                    list.remove(ind);
                                 }
                             }
+                            list.remove(ind);
                             Prefs.deleteTrustedContact(view.getContext(), number.getText().toString());
                             notifyItemRemoved(ind);
                         }
