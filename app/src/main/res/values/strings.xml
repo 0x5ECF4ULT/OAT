@@ -6,4 +6,23 @@
     <string name="password_settings">Password Settings</string>
     <string name="trusted_numbers">Trusted Numbers</string>
     <string name="feature_page">Feature Page</string>
+
+    <string name="pws_dont_match">Passwords do not match</string>
+    <string name="change_pw">Change Password</string>
+    <string name="cancel">Cancel</string>
+    <string name="change">Change</string>
+    <string name="pws_dont_match_message">The old and new password do not match!</string>
+    <string name="ok">Ok</string>
+    <string name="fields_empty">Fields empty</string>
+    <string name="fields_empty_message">One field are empty</string>
+
+    <string name="trustednumber_adddialog_titel">Add Trusted Number</string>
+    <string name="add">Add</string>
+    <string name="trustednumber_deldialog_titel">Delete entry?</string>
+    <string name="trustednumber_deldialog_message">Do you want to delete this entry?</string>
+    <string name="trustednumber_adddialog_name">Name</string>
+    <string name="trustednumber_adddialog_number">Number</string>
+
+    <string name="picture_trap_settings">Picture Trap Settings</string>
+    <string name="gps_tracking_settings">GPS Tracking Settings</string>
 </resources>

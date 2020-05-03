@@ -37,14 +37,14 @@ public class AddDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.add_dialog, null);
 
         builder.setView(view)
-                .setTitle("Add Trusted Number")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.trustednumber_adddialog_titel)
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 })
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if(Ensurer.ensurePhoneNumberIsValid(number.getText().toString(), name.getText().toString()).equals(number.getText().toString())){
