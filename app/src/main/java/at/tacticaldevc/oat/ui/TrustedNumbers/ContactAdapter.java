@@ -66,9 +66,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactI
         @Override
         public void onClick(View view) {
             new AlertDialog.Builder(view.getContext())
-                    .setTitle("Delete entry?")
-                    .setMessage("Do you want to delete this entry?")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    .setTitle(R.string.trustednumber_deldialog_titel)
+                    .setMessage(R.string.trustednumber_deldialog_message)
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             int ind = 0;
@@ -82,7 +82,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactI
                             notifyItemRemoved(ind);
                         }
                     })
-                    .setNegativeButton("Cancel",null)
+                    .setNegativeButton(R.string.cancel,null)
                     .show();
         }
     }
