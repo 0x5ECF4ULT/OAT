@@ -104,6 +104,8 @@ public class Prefs {
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
 
         String salt = prefs.getString(KEY_COMMAND_PASSWORD_SALT, null);
+        String hash = prefs.getString(KEY_COMMAND_PASSWORD, null);
+        if (hash == null) throw OATApplicationException.forNoPasswordSet();
         if (salt == null) {
             SharedPreferences.Editor edit = prefs.edit();
             edit.remove(KEY_COMMAND_PASSWORD);
@@ -120,8 +122,6 @@ public class Prefs {
         algorithm.update(Base64.decode(salt, Base64.NO_WRAP));
         byte[] hashToCheck = algorithm.digest(passwordToCheck.getBytes());
 
-        String hash = prefs.getString(KEY_COMMAND_PASSWORD, null);
-        if (hash == null) throw OATApplicationException.forNoPasswordSet();
         return Arrays.equals(Base64.decode(hash, Base64.NO_WRAP), hashToCheck);
     }
 
