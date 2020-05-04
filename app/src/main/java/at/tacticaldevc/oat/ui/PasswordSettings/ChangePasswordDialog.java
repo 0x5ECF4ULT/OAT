@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import at.tacticaldevc.oat.R;
+import at.tacticaldevc.oat.exceptions.OATApplicationException;
+import at.tacticaldevc.oat.exceptions.OATApplicationExceptionType;
 import at.tacticaldevc.oat.utils.Ensurer;
 import at.tacticaldevc.oat.utils.Prefs;
 
@@ -43,9 +45,28 @@ public class ChangePasswordDialog extends AppCompatDialogFragment {
                 .setPositiveButton(R.string.change, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //Prefs.savePassword(getContext(), new_pw.getText().toString(), old_pw.getText().toString());
-                        if(Prefs.verifyApplicationPassword(getContext(), new_pw.getText().toString())){
-                            Prefs.savePassword(getContext(), new_pw.getText().toString(), old_pw.getText().toString());
+                        if(!new_pw.getText().toString().isEmpty() && !old_pw.getText().toString().isEmpty()){
+                            try{
+                                Prefs.savePassword(getContext(), new_pw.getText().toString(), old_pw.getText().toString());
+                            }
+                            catch (OATApplicationException e){
+                                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                                alert.setTitle(R.string.fields_wrong);
+                                if(e.getExceptionType().equals(OATApplicationExceptionType.PasswordMismatch)){
+                                    alert.setMessage(R.string.missmatching_pws);
+                                }
+                                else {
+                                    alert.setMessage(R.string.internal_error);
+                                }
+                                alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                                AlertDialog alertDialog = alert.create();
+                                alertDialog.show();
+                            }
                         }
                         else {
                             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());

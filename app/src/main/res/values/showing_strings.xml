@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cancel">Cancel</string>
+    <string name="change">Change</string>
+    <string name="add">Add</string>
+    <string name="ok">Ok</string>
+    <string name="change_pw">Change Password</string>
+
+    <string name="fields_empty">Fields empty</string>
+    <string name="fields_wrong">Fields wrong</string>
+    <string name="fields_empty_message">One or more fields are empty!</string>
+    <string name="missmatching_pws">Your old password does not match the saved one!</string>
+    <string name="internal_error">An internal error occurred!</string>
+
+    <string name="trustednumber_adddialog_titel">Add Trusted Number</string>
+    <string name="trustednumber_deldialog_titel">Delete entry?</string>
+    <string name="trustednumber_deldialog_message">Do you want to delete this entry?</string>
+    <string name="trustednumber_adddialog_name">Name</string>
+    <string name="trustednumber_adddialog_number">Number</string>
+
+    <string name="picture_trap_settings">Picture Trap Settings</string>
+    <string name="gps_tracking_settings">GPS Tracking Settings</string>
+</resources>
