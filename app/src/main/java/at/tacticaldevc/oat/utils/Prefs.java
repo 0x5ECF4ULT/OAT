@@ -92,6 +92,7 @@ public class Prefs {
      * @param context         the Context of the Application
      * @param passwordToCheck the password to be verified
      * @return true if the password matches the password that was stored
+     * @throws OATApplicationException if no Password has been set
      */
     public static boolean verifyApplicationPassword(Context context, String passwordToCheck) {
         ensureNotNull(context, "Application Context");
