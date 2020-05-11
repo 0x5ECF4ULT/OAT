@@ -129,6 +129,17 @@ public class SMSCom {
 
         SmsManager smsManager = fetchSMSManager();
         sendDeletePasswordHint(context, phoneNumber, smsManager);
+        smsManager.sendTextMessage(phoneNumber, null, context.getString(R.string.oat_sms_message_send_photo_taken), null, null);
+        smsManager.sendMultimediaMessage(context, imageUri, phoneNumber, null, null);
+    }
+
+    public static void replyPhotoTrapTriggered(Context context, String phoneNumber, Uri imageUri) {
+        ensureNotNull(context, "Application Context");
+        ensurePhoneNumberIsValid(phoneNumber, "phoneNumber");
+        ensureNotNull(imageUri, "the URI of the image taken by the photo trap");
+
+        SmsManager smsManager = fetchSMSManager();
+        sendDeletePasswordHint(context, phoneNumber, smsManager);
         smsManager.sendTextMessage(phoneNumber, null, context.getString(R.string.oat_sms_message_send_photo_trap_triggered), null, null);
         smsManager.sendMultimediaMessage(context, imageUri, phoneNumber, null, null);
     }
