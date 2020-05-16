@@ -18,8 +18,18 @@
     <string name="trustednumber_adddialog_name">Name</string>
     <string name="trustednumber_adddialog_number">Number</string>
 
-    <string name="picture_trap_settings">Picture Trap Settings</string>
+    <string name="photo_trap_settings">Photo Trap Settings</string>
+    <string name="instant_photo_settings">Instant Photo Settings</string>
     <string name="gps_tracking_settings">GPS Tracking Settings</string>
+
+    <string name="gps_tracking">GPS Tracking</string>
+    <string name="instant_photo">Instant Photo</string>
+    <string name="photo_trap">Photo Trap</string>
+
+    <string name="accept_conditions">I accept the conditions above</string>
+    <string name="disclaimer_photo_trap">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
+    <string name="disclaimer_instant_photo">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
+    <string name="disclaimer_tracking">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
 
     <string name="trap_dialog_title">Shutdown</string>
     <string name="trap_dialog_message">Your device will automatically shut down in 30 seconds!\nPlease confirm to shut down immediately or cancel.</string>

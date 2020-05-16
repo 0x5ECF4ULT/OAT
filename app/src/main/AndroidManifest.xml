@@ -30,6 +30,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.FeaturePage.Tracking.TrackingActivity"></activity>
+        <activity android:name=".ui.FeaturePage.InstantPhoto.InstantPhotoActivity" />
+        <activity android:name=".ui.FeaturePage.PhotoTrap.PhotoTrapActivity" />
         <activity android:name=".ui.PasswordSettings.PasswordSettingsActivity" />
         <activity android:name=".ui.FeaturePage.FeaturesPageActivity" />
         <activity android:name=".ui.TrustedNumbers.TrustedNumbersActivity" />
@@ -38,12 +41,13 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <receiver
-            android:name="at.tacticaldevc.oat.listeners.SMSListener"
+            android:name=".listeners.SMSListener"
             android:exported="true"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
