@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.FeaturePage.PhotoTrap.PhotoTrapActivity">
+
+    <TextView
+        android:id="@+id/title_photo_trap"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:backgroundTint="#00000000"
+        android:fontFamily="sans-serif-black"
+        android:foregroundTint="#00000000"
+        android:gravity="center"
+        android:scrollbarSize="0dp"
+        android:text="@string/photo_trap_settings"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="8dp" />
+
+    <LinearLayout
+        android:id="@+id/linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/title_photo_trap"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:id="@+id/disclaimer_photo_trap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="@string/disclaimer_photo_trap"/>
+    </LinearLayout>
+
+
+    <CheckBox
+        android:id="@+id/photo_trap_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/accept_conditions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout"
+        tools:ignore="MissingConstraints" />
+
+    <Switch
+        android:id="@+id/photo_trap_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/photo_trap"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/photo_trap_checkbox"
+        android:layout_margin="10dp"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

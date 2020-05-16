@@ -8,7 +8,7 @@
     tools:context=".ui.FeaturePage.FeaturesPageActivity">
 
     <TextView
-        android:id="@+id/text_home2"
+        android:id="@+id/title_feature_page"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:backgroundTint="#00000000"
@@ -23,22 +23,38 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="8dp" />
 
-    <TextView
+    <Button
+        android:id="@+id/feature_settings_phototrap"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:padding="180dp"
-        android:text="@string/feature_page"
-        app:layout_constraintTop_toBottomOf="@+id/testbutton"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_height="60dp"
+        android:text="@string/photo_trap_settings"
+        android:textAlignment="textStart"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/title_feature_page"
+        tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/testbutton"
+        android:id="@+id/feature_settings_instant_photo"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TestButton"
-        app:layout_constraintTop_toBottomOf="@+id/text_home2"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_height="60dp"
+        android:layout_margin="10dp"
+        android:text="@string/instant_photo_settings"
+        android:textAlignment="textStart"
+        app:layout_constraintTop_toBottomOf="@+id/feature_settings_phototrap"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/feature_settings_tracking"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="10dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/gps_tracking_settings"
+        android:textAlignment="textStart"
+        app:layout_constraintTop_toBottomOf="@+id/feature_settings_instant_photo"
+        tools:ignore="MissingConstraints"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
