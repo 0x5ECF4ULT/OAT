@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import at.tacticaldevc.oat.R;
@@ -23,16 +24,23 @@ public class TrackingActivity extends AppCompatActivity {
         accept.setOnClickListener(cl -> conditionsAcceptedCheck());
 
         activate = findViewById(R.id.tracking_switch);
-        activate.setOnClickListener(cl -> activateFeature());
+        activate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                activateFeature();
+                //featureActiveCheck();
+            }
+        });
         activate.setClickable(false);
 
         featureActiveCheck();
     }
 
     public void featureActiveCheck(){
-        if(Prefs.fetchFeatureEnabledStatus(this,getString(R.string.oat_features_key_trigger_photo_trap))) {
+        if(Prefs.fetchFeatureEnabledStatus(this,getString(R.string.oat_features_key_fetch_gps_position))) {
             accept.setChecked(true);
             activate.setChecked(true);
+            activate.setClickable(true);
         }else{
             accept.setChecked(false);
             activate.setChecked(false);
