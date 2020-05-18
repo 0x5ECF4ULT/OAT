@@ -19,7 +19,6 @@ import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -28,6 +27,7 @@ import java.util.Collections;
 import at.tacticaldevc.oat.exceptions.OATApplicationException;
 
 import static at.tacticaldevc.oat.utils.Ensurer.ensureNotNull;
+import static at.tacticaldevc.oat.utils.Ensurer.ensureStringIsValid;
 
 /**
  * A helper class for the camera
@@ -37,36 +37,47 @@ public class Cam {
     private static CameraDevice cam;
     private static CaptureRequest cr;
 
+    private static Context ctx;
+    private static String phoneNumber;
+    private static boolean photoTrap;
+
     /**
      * Initializes the Camera API. If it fails an Exception is raised. This is the first method to be called.
      *
      * @throws at.tacticaldevc.oat.exceptions.OATApplicationException in case the camera could not be connected
      */
-    public static void init(Context context) {
+    public static void sendPhoto(Context context, String phone, boolean trap) {
         ensureNotNull(context, "Context");
+        ensureStringIsValid(phoneNumber, "phone number");
 
-        cm = context.getSystemService(CameraManager.class);
+        ctx = context;
+        phoneNumber = phone;
+        photoTrap = trap;
 
-        try {
-            for (String identifier : cm.getCameraIdList()) {
-                if (cm.getCameraCharacteristics(identifier).get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT) {
-                    cm.openCamera(identifier, new Cam.StateCallBackListener(), null);
+        if (Prefs.fetchFeatureEnabledStatus(context, "cam")) {
+            cm = context.getSystemService(CameraManager.class);
+
+            try {
+                for (String identifier : cm.getCameraIdList()) {
+                    if (cm.getCameraCharacteristics(identifier).get(CameraCharacteristics.LENS_FACING) == CameraCharacteristics.LENS_FACING_FRONT) {
+                        cm.openCamera(identifier, new Cam.StateCallBackListener(), null);
+                    }
                 }
+            } catch (SecurityException e) {
+                throw OATApplicationException.forSecurityException("Camera2", e);
+            } catch (CameraAccessException e) {
+                throw OATApplicationException.forLibraryError("Camera2", e);
             }
-        } catch (SecurityException e) {
-            throw OATApplicationException.forSecurityException("Camera2", e);
-        } catch (CameraAccessException e) {
-            throw OATApplicationException.forLibraryError("Camera2", e);
         }
     }
 
 
     /**
-     * Initializes the opened camera. This method should be called after Cam.init()
+     * Initializes the opened camera. This method should be called after Cam.sendPhoto()
      *
      * @param characteristics the characteristics to use
      */
-    public static void configure(CameraCharacteristics characteristics) {
+    private static void configure(CameraCharacteristics characteristics) {
         ensureNotNull(cm, "CameraManager");
         ensureNotNull(cam, "Camera");
         ensureNotNull(characteristics, "Camera characteristics");
@@ -94,8 +105,6 @@ public class Cam {
 
     /**
      * If the camera has been opened and configured call this method to take a picture
-     *
-     * @return Image object representation or null if a camera session could not be acquired
      */
     private static void takePicture(CameraCaptureSession ccs) {
         try {
@@ -114,25 +123,24 @@ public class Cam {
         try {
             File f = new File(Environment.getExternalStorageDirectory() + String.format("/cap_%S.jpg", Calendar.getInstance().getTime()));
             FileOutputStream fos = new FileOutputStream(f);
-            f.createNewFile();
 
-            fos.write(bytes);
-            fos.flush();
-            fos.close();
+            if (f.createNewFile()) {
+                fos.write(bytes);
+                fos.flush();
+                fos.close();
+            } else
+                throw new Exception("Output file could not be created!");
 
             return Uri.fromFile(f);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            throw OATApplicationException.forLibraryError("java.io.FileOutputStream", e);
         }
-        return null;
     }
 
     private static void sendImage(Uri imageUri) {
-
-    }
-
-    public static void close() {
-        cam.close();
+        if (photoTrap)
+            SMSCom.replyPhotoTrapTriggered(ctx, phoneNumber, imageUri);
+        SMSCom.replyPhotoTaken(ctx, phoneNumber, imageUri);
     }
 
     private static class StateCallBackListener extends CameraDevice.StateCallback {
@@ -150,6 +158,7 @@ public class Cam {
 
         @Override
         public void onDisconnected(@NonNull CameraDevice camera) {
+            camera.close();
             cr = null;
             cam = null;
         }

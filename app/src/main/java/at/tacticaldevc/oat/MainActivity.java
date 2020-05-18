@@ -10,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import at.tacticaldevc.oat.ui.FeaturePage.FeaturesPageActivity;
 import at.tacticaldevc.oat.ui.PasswordSettings.PasswordSettingsActivity;
 import at.tacticaldevc.oat.ui.TrustedNumbers.TrustedNumbersActivity;
+import at.tacticaldevc.oat.utils.Perms;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
         passwordSettingsButton = findViewById(R.id.password_settings_button);
         passwordSettingsButton.setOnClickListener(cl -> openActivityPasswordSettings());
+
+        //Permission management
+        Perms.loadPermissionStates(this);
+        Perms.requestAllPermissions(this, this);
     }
 
     public void openActivityTrustedNumbers(){

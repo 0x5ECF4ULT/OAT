@@ -3,12 +3,14 @@ package at.tacticaldevc.oat.listeners;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.provider.Telephony;
 import android.telephony.SmsMessage;
 
 import java.util.Set;
 
+import at.tacticaldevc.oat.R;
+import at.tacticaldevc.oat.ui.PhotoTrap.PhotoTrapDialog;
+import at.tacticaldevc.oat.utils.Cam;
 import at.tacticaldevc.oat.utils.Prefs;
 import at.tacticaldevc.oat.utils.SMSCom;
 import at.tacticaldevc.oat.utils.Tracking;
@@ -58,10 +60,13 @@ public class SMSListener extends BroadcastReceiver {
             case "position":
                 Tracking.sendCurrentCoordinatesViaSMS(context, phoneNumber, null);
                 break;
+            case "take-photo":
+                if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_instant_photo)))
+                    Cam.sendPhoto(context, phoneNumber, false);
+                break;
             case "photo-trap":
-                // dispatch to photo trap
-                Uri uri = Uri.EMPTY; // change to URI of taken picture
-                //SMSCom.replyPhotoTaken(context, phoneNumber, uri); // Uncomment when implemented
+                if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_photo_trap)))
+                    PhotoTrapDialog.dispatchUITrap(context, phoneNumber);
                 break;
             default:
                 SMSCom.replyErrorSMS_FeatureNotFound(context, phoneNumber, feature);

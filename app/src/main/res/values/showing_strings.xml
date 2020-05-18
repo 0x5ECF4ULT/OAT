@@ -20,4 +20,7 @@
 
     <string name="picture_trap_settings">Picture Trap Settings</string>
     <string name="gps_tracking_settings">GPS Tracking Settings</string>
+
+    <string name="trap_dialog_title">Shutdown</string>
+    <string name="trap_dialog_message">Your device will automatically shut down in 30 seconds!\nPlease confirm to shut down immediately or cancel.</string>
 </resources>

@@ -26,7 +26,7 @@ import static at.tacticaldevc.oat.utils.Ensurer.ensureStringIsValid;
 public class Perms {
 
     /*Permission constants*/
-    public static final String[] perms = {
+    private static final String[] perms = {
             Manifest.permission.SEND_SMS,
             Manifest.permission.RECEIVE_SMS,
             Manifest.permission.ACCESS_COARSE_LOCATION,
