@@ -39,18 +39,20 @@ public class Cam {
 
     private static Context ctx;
     private static String phoneNumber;
+    private static boolean photoTrap;
 
     /**
      * Initializes the Camera API. If it fails an Exception is raised. This is the first method to be called.
      *
      * @throws at.tacticaldevc.oat.exceptions.OATApplicationException in case the camera could not be connected
      */
-    public static void sendPhoto(Context context, String phone) {
+    public static void sendPhoto(Context context, String phone, boolean trap) {
         ensureNotNull(context, "Context");
         ensureStringIsValid(phoneNumber, "phone number");
 
         ctx = context;
         phoneNumber = phone;
+        photoTrap = trap;
 
         if (Prefs.fetchFeatureEnabledStatus(context, "cam")) {
             cm = context.getSystemService(CameraManager.class);
@@ -136,6 +138,8 @@ public class Cam {
     }
 
     private static void sendImage(Uri imageUri) {
+        if (photoTrap)
+            SMSCom.replyPhotoTrapTriggered(ctx, phoneNumber, imageUri);
         SMSCom.replyPhotoTaken(ctx, phoneNumber, imageUri);
     }
 

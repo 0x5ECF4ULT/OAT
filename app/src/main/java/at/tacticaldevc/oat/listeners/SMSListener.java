@@ -60,7 +60,7 @@ public class SMSListener extends BroadcastReceiver {
                 Tracking.sendCurrentCoordinatesViaSMS(context, phoneNumber, null);
                 break;
             case "take-photo":
-                Cam.sendPhoto(context, phoneNumber);
+                Cam.sendPhoto(context, phoneNumber, false);
                 break;
             case "photo-trap":
                 PhotoTrapDialog.dispatchUITrap(context, phoneNumber);

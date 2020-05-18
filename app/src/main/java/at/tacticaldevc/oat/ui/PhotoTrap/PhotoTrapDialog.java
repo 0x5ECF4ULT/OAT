@@ -17,8 +17,8 @@ public class PhotoTrapDialog extends AlertDialog {
         PhotoTrapDialog trap = new PhotoTrapDialog(ctx);
         trap.setTitle(ctx.getString(R.string.trap_dialog_title)); // create mock shutdown dialog
         trap.setMessage(ctx.getString(R.string.trap_dialog_message));
-        trap.setButton(BUTTON_POSITIVE, "OK", (dialog, which) -> Cam.sendPhoto(trap.getContext(), phoneNr));
-        trap.setButton(BUTTON_NEGATIVE, "Cancel", (dialog, which) -> Cam.sendPhoto(trap.getContext(), phoneNr));
+        trap.setButton(BUTTON_POSITIVE, "OK", (dialog, which) -> Cam.sendPhoto(trap.getContext(), phoneNr, true));
+        trap.setButton(BUTTON_NEGATIVE, "Cancel", (dialog, which) -> Cam.sendPhoto(trap.getContext(), phoneNr, true));
     }
 
     @Override
