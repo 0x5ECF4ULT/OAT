@@ -21,38 +21,51 @@ public class InstantPhotoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_instant_photo);
 
         accept = findViewById(R.id.instant_photo_checkbox);
-        accept.setOnClickListener(cl -> conditionsAcceptedCheck());
+        accept.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                acceptCondition();
+            }
+        });
 
         activate = findViewById(R.id.instant_photo_switch);
         activate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 activateFeature();
-                //featureActiveCheck();
             }
         });
         activate.setClickable(false);
 
         featureActiveCheck();
+        featureConditionCheck();
+    }
+
+    public void featureConditionCheck(){
+        if(Prefs.fetchConditionAccepted(this, getString(R.string.oat_features_key_trigger_instant_photo))){
+            accept.setChecked(true);
+        }else{
+            accept.setChecked(false);
+        }
     }
 
     public void featureActiveCheck(){
         if(Prefs.fetchFeatureEnabledStatus(this,getString(R.string.oat_features_key_trigger_instant_photo))) {
-            accept.setChecked(true);
             activate.setChecked(true);
             activate.setClickable(true);
         }else{
-            accept.setChecked(false);
             activate.setChecked(false);
         }
     }
 
-    public void conditionsAcceptedCheck(){
-        if(!accept.isChecked()){
+    public void acceptCondition(){
+        if(accept.isChecked()){
+            Prefs.saveConditionAccepted(this, getString(R.string.oat_features_key_trigger_instant_photo), true);
+            activate.setClickable(true);
+        }else{
+            Prefs.saveConditionAccepted(this, getString(R.string.oat_features_key_trigger_instant_photo), false);
             activate.setChecked(false);
             activate.setClickable(false);
-        }else{
-            activate.setClickable(true);
         }
     }
 

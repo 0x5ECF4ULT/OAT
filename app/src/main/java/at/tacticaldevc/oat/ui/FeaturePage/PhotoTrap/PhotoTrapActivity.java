@@ -21,38 +21,51 @@ public class PhotoTrapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_photo_trap);
 
         accept = findViewById(R.id.photo_trap_checkbox);
-        accept.setOnClickListener(cl -> conditionsAcceptedCheck());
+        accept.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                acceptCondition();
+            }
+        });
 
         activate = findViewById(R.id.photo_trap_switch);
         activate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 activateFeature();
-                //featureActiveCheck();
             }
         });
         activate.setClickable(false);
 
         featureActiveCheck();
+        featureConditionCheck();
+    }
+
+    public void featureConditionCheck(){
+        if(Prefs.fetchConditionAccepted(this, getString(R.string.oat_features_key_trigger_photo_trap))){
+            accept.setChecked(true);
+        }else{
+            accept.setChecked(false);
+        }
     }
 
     public void featureActiveCheck(){
         if(Prefs.fetchFeatureEnabledStatus(this,getString(R.string.oat_features_key_trigger_photo_trap))) {
-            accept.setChecked(true);
             activate.setChecked(true);
             activate.setClickable(true);
         }else{
-            accept.setChecked(false);
             activate.setChecked(false);
         }
     }
 
-    public void conditionsAcceptedCheck(){
-        if(!accept.isChecked()){
+    public void acceptCondition(){
+        if(accept.isChecked()){
+            Prefs.saveConditionAccepted(this, getString(R.string.oat_features_key_trigger_photo_trap), true);
+            activate.setClickable(true);
+        }else{
+            Prefs.saveConditionAccepted(this, getString(R.string.oat_features_key_trigger_photo_trap), false);
             activate.setChecked(false);
             activate.setClickable(false);
-        }else{
-            activate.setClickable(true);
         }
     }
 
