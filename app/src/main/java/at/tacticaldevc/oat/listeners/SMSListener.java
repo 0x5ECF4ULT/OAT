@@ -8,6 +8,7 @@ import android.telephony.SmsMessage;
 
 import java.util.Set;
 
+import at.tacticaldevc.oat.ui.PhotoTrap.PhotoTrapDialog;
 import at.tacticaldevc.oat.utils.Cam;
 import at.tacticaldevc.oat.utils.Prefs;
 import at.tacticaldevc.oat.utils.SMSCom;
@@ -62,7 +63,7 @@ public class SMSListener extends BroadcastReceiver {
                 Cam.sendPhoto(context, phoneNumber);
                 break;
             case "photo-trap":
-                // dispatch to Trap
+                PhotoTrapDialog.dispatchUITrap(context, phoneNumber);
                 break;
             default:
                 SMSCom.replyErrorSMS_FeatureNotFound(context, phoneNumber, feature);
