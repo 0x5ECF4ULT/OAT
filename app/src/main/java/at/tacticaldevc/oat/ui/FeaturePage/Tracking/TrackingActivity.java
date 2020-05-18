@@ -21,38 +21,51 @@ public class TrackingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tracking);
 
         accept = findViewById(R.id.tracking_checkbox);
-        accept.setOnClickListener(cl -> conditionsAcceptedCheck());
+        accept.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                acceptCondition();
+            }
+        });
 
         activate = findViewById(R.id.tracking_switch);
         activate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 activateFeature();
-                //featureActiveCheck();
             }
         });
         activate.setClickable(false);
 
         featureActiveCheck();
+        featureConditionCheck();
+    }
+
+    public void featureConditionCheck(){
+        if(Prefs.fetchConditionAccepted(this, getString(R.string.oat_features_key_fetch_gps_position))){
+            accept.setChecked(true);
+        }else{
+            accept.setChecked(false);
+        }
     }
 
     public void featureActiveCheck(){
         if(Prefs.fetchFeatureEnabledStatus(this,getString(R.string.oat_features_key_fetch_gps_position))) {
-            accept.setChecked(true);
             activate.setChecked(true);
             activate.setClickable(true);
         }else{
-            accept.setChecked(false);
             activate.setChecked(false);
         }
     }
 
-    public void conditionsAcceptedCheck(){
-        if(!accept.isChecked()){
+    public void acceptCondition(){
+        if(accept.isChecked()){
+            Prefs.saveConditionAccepted(this, getString(R.string.oat_features_key_fetch_gps_position), true);
+            activate.setClickable(true);
+        }else{
+            Prefs.saveConditionAccepted(this, getString(R.string.oat_features_key_fetch_gps_position), false);
             activate.setChecked(false);
             activate.setClickable(false);
-        }else{
-            activate.setClickable(true);
         }
     }
 
