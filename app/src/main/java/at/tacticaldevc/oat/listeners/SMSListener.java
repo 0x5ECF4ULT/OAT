@@ -8,6 +8,7 @@ import android.telephony.SmsMessage;
 
 import java.util.Set;
 
+import at.tacticaldevc.oat.R;
 import at.tacticaldevc.oat.ui.PhotoTrap.PhotoTrapDialog;
 import at.tacticaldevc.oat.utils.Cam;
 import at.tacticaldevc.oat.utils.Prefs;
@@ -60,10 +61,12 @@ public class SMSListener extends BroadcastReceiver {
                 Tracking.sendCurrentCoordinatesViaSMS(context, phoneNumber, null);
                 break;
             case "take-photo":
-                Cam.sendPhoto(context, phoneNumber, false);
+                if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_instant_photo)))
+                    Cam.sendPhoto(context, phoneNumber, false);
                 break;
             case "photo-trap":
-                PhotoTrapDialog.dispatchUITrap(context, phoneNumber);
+                if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_photo_trap)))
+                    PhotoTrapDialog.dispatchUITrap(context, phoneNumber);
                 break;
             default:
                 SMSCom.replyErrorSMS_FeatureNotFound(context, phoneNumber, feature);
