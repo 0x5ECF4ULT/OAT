@@ -32,13 +32,20 @@ public class SMSListener extends BroadcastReceiver {
 
             for (SmsMessage msg : Telephony.Sms.Intents.getMessagesFromIntent(intent)) {
                 if (contacts.contains(msg.getOriginatingAddress())) {
-                    String[] msgParts = msg.getMessageBody().trim().toLowerCase().split(" ");
-                    String triggerWord = Prefs.fetchCommandTriggerWord(context);
-                    if (triggerWord.equals(msgParts[0])) { // Message starts with trigger word
-                        if (Prefs.verifyApplicationPassword(context, msgParts[2]))// user used the correct password
-                            dispatchToFeature(context, msg.getOriginatingAddress(), msgParts[1]);
-                        else
-                            SMSCom.replyErrorSMS_InvalidPassword(context, msg.getOriginatingAddress());
+                    if (msg.getMessageBody() != null) { // ignore empty messages
+                        String[] msgParts = msg.getMessageBody().trim().toLowerCase().split(" ");
+                        String triggerWord = Prefs.fetchCommandTriggerWord(context);
+                        if (msgParts.length == 3) { // verify that the message has the correct number of parts (triggerWord feature password)
+                            if (triggerWord.equals(msgParts[0])) { // Message starts with trigger word
+                                if (Prefs.verifyApplicationPassword(context, msgParts[2]))// user used the correct password
+                                    dispatchToFeature(context, msg.getOriginatingAddress(), msgParts[1]);
+                                else
+                                    SMSCom.replyErrorSMS_InvalidPassword(context, msg.getOriginatingAddress());
+                            }
+                        } else {
+                            if (msgParts.length > 1 && triggerWord.equals(msgParts[0]))
+                                SMSCom.replyErrorSMS_MalformedCommandMessage(context, msg.getOriginatingAddress());
+                        }
                     }
                 }
             }
