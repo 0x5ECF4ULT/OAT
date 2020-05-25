@@ -27,6 +27,7 @@ public class Perms {
 
     /*Permission constants*/
     private static final String[] perms = {
+            Manifest.permission.CAMERA,
             Manifest.permission.SEND_SMS,
             Manifest.permission.RECEIVE_SMS,
             Manifest.permission.ACCESS_COARSE_LOCATION,
