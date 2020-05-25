@@ -38,6 +38,21 @@ public class SMSCom {
     }
 
     /**
+     * Reply that the message was malformed
+     *
+     * @param context     the {@link Context} of the Application
+     * @param phoneNumber the phone number that send the message
+     */
+    public static void replyErrorSMS_MalformedCommandMessage(Context context, String phoneNumber) {
+        ensureNotNull(context, "Application Context");
+        ensurePhoneNumberIsValid(phoneNumber, "target phone number");
+
+        SmsManager smsManager = fetchSMSManager();
+        sendDeletePasswordHint(context, phoneNumber, smsManager);
+        smsManager.sendTextMessage(phoneNumber, null, context.getString(R.string.oat_sms_message_error_malformed_message), null, null);
+    }
+
+    /**
      * Reply that the requested feature does not exist
      *
      * @param context     the {@link Context} of the Application
@@ -133,6 +148,13 @@ public class SMSCom {
         smsManager.sendMultimediaMessage(context, imageUri, phoneNumber, null, null);
     }
 
+    /**
+     * Send the picture that was taken
+     *
+     * @param context     the{@link Context} of the Application
+     * @param phoneNumber the target phone number
+     * @param imageUri    the {@link Uri} of the picture to be sent
+     */
     public static void replyPhotoTrapTriggered(Context context, String phoneNumber, Uri imageUri) {
         ensureNotNull(context, "Application Context");
         ensurePhoneNumberIsValid(phoneNumber, "phoneNumber");
