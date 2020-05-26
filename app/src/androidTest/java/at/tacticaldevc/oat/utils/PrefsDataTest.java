@@ -20,6 +20,7 @@ import at.tacticaldevc.oat.exceptions.OATApplicationException;
 import static at.tacticaldevc.oat.utils.Prefs.addNewOnStartupPermissionRequest;
 import static at.tacticaldevc.oat.utils.Prefs.fetchCommandTriggerWord;
 import static at.tacticaldevc.oat.utils.Prefs.fetchOnStartupPermissionRequests;
+import static at.tacticaldevc.oat.utils.Prefs.getLockdownStatus;
 import static at.tacticaldevc.oat.utils.Prefs.removeOnStartupPermissionRequest;
 import static at.tacticaldevc.oat.utils.Prefs.saveCommandTriggerWord;
 import static at.tacticaldevc.oat.utils.Prefs.savePassword;
@@ -35,6 +36,7 @@ public class PrefsDataTest {
     private final static String KEY_COMMAND_PASSWORD_SALT = "pwdsalt";
     private final static String KEY_COMMAND_TRIGGER = "cmd-trigger";
     private final static String KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP = "missing-permission";
+    private final static String KEY_LOCKDOWN_STATUS = "lockdown-status";
 
     @Before
     public void init() {
@@ -164,6 +166,8 @@ public class PrefsDataTest {
         assertThat(prefs.getString(KEY_COMMAND_PASSWORD_SALT, null)).isNull();
     }
 
+    // Command trigger word
+
     @Test
     public void saveCommandTriggerWordWithInvalidValues() {
         // test
@@ -231,6 +235,48 @@ public class PrefsDataTest {
 
         // assert
         assertThat(result).isEqualTo(trigger);
+    }
+
+    // Application state
+
+    @Test
+    public void getLockdownStatusWithoutExistingData() {
+        // test
+        boolean result = getLockdownStatus(InstrumentationRegistry.getInstrumentation().getTargetContext());
+
+        //assert
+        assertThat(result).isEqualTo(false);
+    }
+
+    @Test
+    public void getLockdownStatusWithExistingData() {
+        // prepare
+        SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean(KEY_LOCKDOWN_STATUS, true);
+        edit.apply();
+
+        // test
+        boolean result = getLockdownStatus(InstrumentationRegistry.getInstrumentation().getTargetContext());
+
+        // assert
+        assertThat(result).isEqualTo(true);
+    }
+
+    @Test
+    public void setLockdownStatus() {
+        // prepare
+        SharedPreferences prefs = InstrumentationRegistry.getInstrumentation().getTargetContext().getSharedPreferences(DOCUMENT_NAME_TEST, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean(KEY_LOCKDOWN_STATUS, false);
+        edit.apply();
+
+        // test
+        Prefs.setLockdownStatus(InstrumentationRegistry.getInstrumentation().getTargetContext(), true);
+
+        // assert
+        boolean result = prefs.getBoolean(KEY_LOCKDOWN_STATUS, false);
+        assertThat(result).isTrue();
     }
 
     // on startup permission request
