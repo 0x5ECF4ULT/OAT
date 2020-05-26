@@ -63,17 +63,27 @@ public class SMSListener extends BroadcastReceiver {
                 // dispatch to unlock
                 SMSCom.replyDeviceUnlocked(context, phoneNumber);
                 break;
+            case "gps":
             case "location":
             case "position":
-                Tracking.sendCurrentCoordinatesViaSMS(context, phoneNumber, null);
+                if (Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_access_coarse_location)) || Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_access_fine_location)))
+                    Tracking.sendCurrentCoordinatesViaSMS(context, phoneNumber, null);
+                else
+                    SMSCom.replyErrorSMS_DisabledPermission(context, phoneNumber, "gps");
                 break;
             case "take-photo":
-                if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_instant_photo)))
-                    Cam.sendPhoto(context, phoneNumber, false);
+                if (Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_camera))) {
+                    if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_instant_photo)))
+                        Cam.sendPhoto(context, phoneNumber, false);
+                } else
+                    SMSCom.replyErrorSMS_DisabledPermission(context, phoneNumber, "take-photo");
                 break;
             case "photo-trap":
-                if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_photo_trap)))
-                    PhotoTrapDialog.dispatchUITrap(context, phoneNumber);
+                if (Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_camera))) {
+                    if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_photo_trap)))
+                        PhotoTrapDialog.dispatchUITrap(context, phoneNumber);
+                } else
+                    SMSCom.replyErrorSMS_DisabledPermission(context, phoneNumber, "photo-trap");
                 break;
             default:
                 SMSCom.replyErrorSMS_FeatureNotFound(context, phoneNumber, feature);
