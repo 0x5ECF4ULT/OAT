@@ -38,6 +38,7 @@ public class Prefs {
     private final static String KEY_COMMAND_PASSWORD_SALT = "pwdsalt";
     private final static String KEY_COMMAND_TRIGGER = "cmd-trigger";
     private final static String KEY_MISSING_PERMISSIONS_TO_REQUEST_ON_STARTUP = "missing-permission";
+    private final static String KEY_LOCKDOWN_STATUS = "lockdown-status";
 
     // Basic Data
 
@@ -137,7 +138,7 @@ public class Prefs {
         ensureNotNull(context, "Application Context");
         ensureStringIsValid(trigger, "Application trigger");
         if (trigger.contains(" "))
-            throw new IllegalArgumentException("trigger cannot contain ' '!");
+            throw new IllegalArgumentException("trigger cannot contain a space character!");
 
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
@@ -159,6 +160,38 @@ public class Prefs {
 
         SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
         return prefs.getString(KEY_COMMAND_TRIGGER, "oat");
+    }
+
+    // App state
+
+    /**
+     * Fetches the status, if the Phone is under lockdown
+     *
+     * @param context the Context of the Application
+     * @return true if the phone is under lockdown, false if the phone is not under lockdown
+     */
+    public static boolean getLockdownStatus(Context context) {
+        ensureNotNull(context, "Application Context");
+
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
+        return prefs.getBoolean(KEY_LOCKDOWN_STATUS, false);
+    }
+
+    /**
+     * Saves the Loockdown status of the phone (if lockdown is enabled)
+     *
+     * @param context        the Application Context
+     * @param lockdownStatus true if lockdown was enabled, false if it was disabled
+     */
+    public static void setLockdownStatus(Context context, boolean lockdownStatus) {
+        ensureNotNull(context, "Application Context");
+
+        SharedPreferences prefs = context.getSharedPreferences(DOCUMENT_NAME_DATA, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+
+        edit.putBoolean(KEY_LOCKDOWN_STATUS, lockdownStatus);
+
+        edit.apply();
     }
 
     // Trusted Contacts
