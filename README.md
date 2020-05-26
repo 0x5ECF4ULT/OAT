@@ -32,6 +32,7 @@ Things you can do:
 - ```android.permission.SEND_SMS``` (to reply to commands)
 - ```android.permission.ACCESS_COARSE_LOCATION``` (to request the current location if the feature is enabled)
 - ```android.permission.ACCESS_FINE_LOCATION``` (to request the current location if the feature is enabled)
+- ```android.permission.CAMERA``` (to send a photo if the feature photo-trap or instant-photo is enabled)
 
 ## Links
  - [License](LICENSE)
