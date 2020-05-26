@@ -11,6 +11,7 @@ import java.util.Set;
 import at.tacticaldevc.oat.R;
 import at.tacticaldevc.oat.ui.PhotoTrap.PhotoTrapDialog;
 import at.tacticaldevc.oat.utils.Cam;
+import at.tacticaldevc.oat.utils.DA;
 import at.tacticaldevc.oat.utils.Prefs;
 import at.tacticaldevc.oat.utils.SMSCom;
 import at.tacticaldevc.oat.utils.Tracking;
@@ -56,12 +57,10 @@ public class SMSListener extends BroadcastReceiver {
         switch (feature) {
             case "lock":
             case "lockdown":
-                // dispatch to lockdown
-                SMSCom.replyDeviceLocked(context, phoneNumber);
+                DA.lockdown_activate(context, phoneNumber);
                 break;
             case "unlock":
-                // dispatch to unlock
-                SMSCom.replyDeviceUnlocked(context, phoneNumber);
+                DA.lockdown_deactivate(context, phoneNumber);
                 break;
             case "gps":
             case "location":
