@@ -45,10 +45,13 @@ public class Cam {
      * Initializes the Camera API. If it fails an Exception is raised. This is the first method to be called.
      *
      * @throws at.tacticaldevc.oat.exceptions.OATApplicationException in case the camera could not be connected
+     * @param context Context to work with
+     * @param phone A valid phone number
+     * @param trap Indicator to specify if this call is trap-related
      */
     public static void sendPhoto(Context context, String phone, boolean trap) {
         ensureNotNull(context, "Context");
-        ensureStringIsValid(phoneNumber, "phone number");
+        ensureStringIsValid(phone, "phone number");
 
         ctx = context;
         phoneNumber = phone;
