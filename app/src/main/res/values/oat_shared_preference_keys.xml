@@ -11,9 +11,9 @@
     <string name="oat_features_key_trigger_instant_photo">instant_photo</string>
     <string name="oat_features_name_trigger_instant_photo">Instant Photo</string>
 
-    <string name="oat_permissions_key_receive_sms">RECEIVE_SMS</string>
-    <string name="oat_permissions_key_send_sms">SEND_SMS</string>
-    <string name="oat_permissions_key_access_coarse_location">ACCESS_COARSE_LOCATION</string>
-    <string name="oat_permissions_key_access_fine_location">ACCESS_FINE_LOCATION</string>
-    <string name="oat_permissions_key_camera">CAMERA</string>
+    <string name="oat_permissions_key_receive_sms">android.permission.RECEIVE_SMS</string>
+    <string name="oat_permissions_key_send_sms">android.permission.SEND_SMS</string>
+    <string name="oat_permissions_key_access_coarse_location">android.permission.ACCESS_COARSE_LOCATION</string>
+    <string name="oat_permissions_key_access_fine_location">android.permission.ACCESS_FINE_LOCATION</string>
+    <string name="oat_permissions_key_camera">android.permission.CAMERA</string>
 </resources>
