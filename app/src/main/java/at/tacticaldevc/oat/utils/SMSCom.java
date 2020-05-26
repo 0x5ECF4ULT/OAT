@@ -84,6 +84,23 @@ public class SMSCom {
     }
 
     /**
+     * Reply that the requested feature has missing permissions
+     *
+     * @param context     the {@link Context} of the Application
+     * @param phoneNumber the phone number that send the message
+     * @param feature     the feature that has missing permissions
+     */
+    public static void replyErrorSMS_DisabledPermission(Context context, String phoneNumber, String feature) {
+        ensureNotNull(context, "Application Context");
+        ensureStringIsValid(feature, "feature name");
+        ensurePhoneNumberIsValid(phoneNumber, "target phone number");
+
+        SmsManager smsManager = fetchSMSManager();
+        sendDeletePasswordHint(context, phoneNumber, smsManager);
+        smsManager.sendTextMessage(phoneNumber, null, String.format(context.getString(R.string.oat_sms_message_error_permission_not_granted), feature), null, null);
+    }
+
+    /**
      * Reply with the given GPS Position of the Device.
      *
      * @param context     the {@link Context} of the Application
