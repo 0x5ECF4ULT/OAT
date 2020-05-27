@@ -1,5 +1,6 @@
 package at.tacticaldevc.oat.utils;
 
+import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -15,6 +16,8 @@ import static at.tacticaldevc.oat.utils.Ensurer.ensureStringIsValid;
  * A helper class for device administration
  */
 public class DA {
+
+    private static final int DA_REQUEST_CODE = 1234;
 
     /**
      * Activate the lockdown using DA
@@ -52,11 +55,15 @@ public class DA {
             SMSCom.replyErrorSMS_FeatureDisabled(ctx, phone, ctx.getString(R.string.oat_features_name_lift_lockdown));
     }
 
-    public static void request_deviceAdmin(Context ctx) {
-        ComponentName component = new ComponentName(ctx, DeviceAdminListener.class);
-        Intent i = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
-                .putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
-                .putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "For lockdown to work properly the device admin is required!");
-        ctx.startActivity(i);
+    public static void request_deviceAdmin(Activity ctx) {
+        DevicePolicyManager dpm = (DevicePolicyManager) ctx.getSystemService(Context.DEVICE_POLICY_SERVICE);
+        ComponentName adminComponent = new ComponentName(ctx, DeviceAdminListener.class);
+
+        if (!dpm.isAdminActive(adminComponent)) {
+            Intent activateDeviceAdminIntent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+            activateDeviceAdminIntent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
+
+            ctx.startActivityForResult(activateDeviceAdminIntent, DA_REQUEST_CODE);
+        }
     }
 }
