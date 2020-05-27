@@ -99,6 +99,7 @@ public class Cam {
         Arrays.sort(sizes, (a, b) -> Integer.compare(a.getWidth(), b.getWidth()));
 
         ImageReader ir = ImageReader.newInstance(sizes[0].getWidth(), sizes[0].getHeight(), chosenFormat, 1);
+        ir.setOnImageAvailableListener(new ImageReaderPictureAvailableCallback(), null);
         CaptureRequest.Builder crb;
         try {
             crb = cam.createCaptureRequest(CameraDevice.TEMPLATE_ZERO_SHUTTER_LAG);
