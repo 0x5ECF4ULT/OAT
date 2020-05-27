@@ -58,12 +58,7 @@ public class ChangePasswordDialog extends AppCompatDialogFragment {
                                 else {
                                     alert.setMessage(R.string.internal_error);
                                 }
-                                alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                    }
-                                });
+                                alert.setPositiveButton(R.string.ok, null);
                                 AlertDialog alertDialog = alert.create();
                                 alertDialog.show();
                             }
@@ -72,12 +67,7 @@ public class ChangePasswordDialog extends AppCompatDialogFragment {
                             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                             alert.setTitle(R.string.fields_empty);
                             alert.setMessage(R.string.fields_empty_message);
-                            alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            });
+                            alert.setPositiveButton(R.string.ok, null);
                             AlertDialog alertDialog = alert.create();
                             alertDialog.show();
                         }
