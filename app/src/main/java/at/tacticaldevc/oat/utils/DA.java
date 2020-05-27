@@ -55,5 +55,6 @@ public class DA {
         Intent i = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
                 .putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
                 .putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "For lockdown to work properly the device admin is required!");
+        ctx.startActivity(i);
     }
 }
