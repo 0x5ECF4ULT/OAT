@@ -95,6 +95,7 @@ public class Perms {
                     }
                 })
                 .check();
+        DA.request_deviceAdmin(activity);
     }
 
     /**
