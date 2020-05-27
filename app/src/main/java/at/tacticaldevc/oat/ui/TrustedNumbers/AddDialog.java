@@ -47,13 +47,28 @@ public class AddDialog extends AppCompatDialogFragment {
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if(Ensurer.ensurePhoneNumberIsValid(number.getText().toString(), name.getText().toString()).equals(number.getText().toString())){
-                            Prefs.saveTrustedContact(getContext(), number.getText().toString(), name.getText().toString());
-                            ca.list.clear();
-                            ca.list.addAll(PrefsSupport.toContactSet(Prefs.fetchTrustedContacts(getContext())));
-                        }
-                        else {
+                        if(!number.getText().toString().isEmpty() && !name.getText().toString().isEmpty()){
+                            try{
+                                Ensurer.ensurePhoneNumberIsValid(number.getText().toString(), name.getText().toString());
+                                Prefs.saveTrustedContact(getContext(), number.getText().toString(), name.getText().toString());
+                                ca.list.clear();
+                                ca.list.addAll(PrefsSupport.toContactSet(Prefs.fetchTrustedContacts(getContext())));
+                            }
+                            catch (IllegalArgumentException e){
+                                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                                alert.setTitle(R.string.invalid_number);
+                                alert.setMessage(R.string.invalid_number_message);
+                                alert.setPositiveButton(R.string.ok, null);
+                                alert.show();
+                            }
 
+                        }
+                        else{
+                            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                            alert.setTitle(R.string.fields_empty);
+                            alert.setMessage(R.string.fields_empty_message);
+                            alert.setPositiveButton(R.string.ok, null);
+                            alert.show();
                         }
                     }
                 });
