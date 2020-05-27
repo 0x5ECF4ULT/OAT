@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 
+import at.tacticaldevc.oat.R;
 import at.tacticaldevc.oat.exceptions.OATApplicationException;
 
 import static at.tacticaldevc.oat.utils.Ensurer.ensureNotNull;
@@ -57,7 +58,7 @@ public class Cam {
         phoneNumber = phone;
         photoTrap = trap;
 
-        if (Prefs.fetchFeatureEnabledStatus(context, "cam")) {
+        if ((trap && Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_photo_trap))) || !trap && Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_instant_photo))) {
             cm = context.getSystemService(CameraManager.class);
 
             try {
@@ -71,6 +72,11 @@ public class Cam {
             } catch (CameraAccessException e) {
                 throw OATApplicationException.forLibraryError("Camera2", e);
             }
+        } else {
+            if (trap)
+                SMSCom.replyErrorSMS_FeatureDisabled(context, phoneNumber, context.getString(R.string.oat_features_name_trigger_photo_trap));
+            else
+                SMSCom.replyErrorSMS_FeatureDisabled(context, phoneNumber, context.getString(R.string.oat_features_name_trigger_instant_photo));
         }
     }
 
