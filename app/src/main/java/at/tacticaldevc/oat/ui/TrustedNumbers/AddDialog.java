@@ -51,8 +51,15 @@ public class AddDialog extends AppCompatDialogFragment {
                             try{
                                 Ensurer.ensurePhoneNumberIsValid(number.getText().toString(), name.getText().toString());
                                 Prefs.saveTrustedContact(getContext(), number.getText().toString(), name.getText().toString());
-                                ca.list.clear();
-                                ca.list.addAll(PrefsSupport.toContactSet(Prefs.fetchTrustedContacts(getContext())));
+                                Contact c = new Contact(name.getText().toString(), number.getText().toString());
+                                ca.list.add(c);
+                                int pos = 0;
+                                for(Contact contact: ca.list){
+                                    if(contact.getNumber().equals(c.getNumber())){
+                                        pos = ca.list.indexOf(contact);
+                                    }
+                                }
+                                ca.notifyItemInserted(pos);
                             }
                             catch (IllegalArgumentException e){
                                 AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
