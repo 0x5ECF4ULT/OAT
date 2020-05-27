@@ -47,4 +47,8 @@ public class DA {
             SMSCom.replyDeviceUnlocked(ctx, phone);
         }
     }
+
+    public static void request_deviceAdmin(Context ctx) {
+
+    }
 }

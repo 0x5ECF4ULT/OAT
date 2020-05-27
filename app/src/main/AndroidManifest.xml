@@ -57,6 +57,9 @@
         <receiver
             android:name=".listeners.DeviceAdminListener"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="at.tacticaldevc.oat"
+                android:resource="@xml/device_admin_policies" />
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
                 <action android:name="android.app.action.DEVICE_ADMIN_DISABLES" />
