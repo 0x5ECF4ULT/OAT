@@ -74,7 +74,8 @@ public class Perms {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         if (report.areAllPermissionsGranted())
-                            return;
+                            for (PermissionGrantedResponse perm : report.getGrantedPermissionResponses())
+                                permsStore.put(perm.getPermissionName(), true);
 
                         for (PermissionGrantedResponse perm : report.getGrantedPermissionResponses()) {
                             permsStore.put(perm.getPermissionName(), true);
