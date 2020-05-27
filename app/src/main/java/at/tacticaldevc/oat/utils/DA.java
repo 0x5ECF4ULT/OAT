@@ -30,7 +30,7 @@ public class DA {
         ensureStringIsValid(phone, "Phone number");
 
         if (Prefs.fetchFeatureEnabledStatus(ctx, ctx.getString(R.string.oat_features_key_trigger_lockdown))) {
-            DevicePolicyManager pol = DeviceAdminListener.getDAObject().getManager(ctx);
+            DevicePolicyManager pol = (DevicePolicyManager) ctx.getSystemService(Context.DEVICE_POLICY_SERVICE);
             Prefs.setLockdownStatus(ctx, true);
             pol.lockNow();
             SMSCom.replyDeviceLocked(ctx, phone);
