@@ -31,7 +31,8 @@ public class DA {
             Prefs.setLockdownStatus(ctx, true);
             pol.lockNow();
             SMSCom.replyDeviceLocked(ctx, phone);
-        }
+        } else
+            SMSCom.replyErrorSMS_FeatureDisabled(ctx, phone, ctx.getString(R.string.oat_features_name_trigger_lockdown));
     }
 
     /**
@@ -47,7 +48,8 @@ public class DA {
         if (Prefs.fetchFeatureEnabledStatus(ctx, ctx.getString(R.string.oat_features_key_trigger_lockdown))) {
             Prefs.setLockdownStatus(ctx, false);
             SMSCom.replyDeviceUnlocked(ctx, phone);
-        }
+        } else
+            SMSCom.replyErrorSMS_FeatureDisabled(ctx, phone, ctx.getString(R.string.oat_features_name_lift_lockdown));
     }
 
     public static void request_deviceAdmin(Context ctx) {
