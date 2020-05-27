@@ -1,7 +1,9 @@
 package at.tacticaldevc.oat.utils;
 
 import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 
 import at.tacticaldevc.oat.R;
 import at.tacticaldevc.oat.listeners.DeviceAdminListener;
@@ -49,6 +51,9 @@ public class DA {
     }
 
     public static void request_deviceAdmin(Context ctx) {
-
+        ComponentName component = new ComponentName(ctx, DeviceAdminListener.class);
+        Intent i = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN)
+                .putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, component)
+                .putExtra(DevicePolicyManager.EXTRA_ADD_EXPLANATION, "For lockdown to work properly the device admin is required!");
     }
 }
