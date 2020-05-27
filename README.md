@@ -16,10 +16,17 @@ How it works? First you have to lose your phone. Yes it's annoying but otherwise
 ## Features
 Trigger it via:
  - SMS
- - Messenger
  
 Things you can do:
- - Location
+ - location:       request location (if enabled)
+ - instant-photo:  request picture (if enabled)
+ - photo-trap:     request picture after dialoge interaction (if enabled)
+ - lockdown:       automatically locks phone and prevents phone from beeing unlocked
+ - unlock:         lifts lockdown and allows the device to be unlocked normally
+ 
+ Schema for SMS requests:
+ ```oat <feature> <password>```
+ 
 
 ## Coming soon
  - Trigger via Internet (homeserver required)
