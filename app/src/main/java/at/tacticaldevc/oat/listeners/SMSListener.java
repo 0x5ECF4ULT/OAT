@@ -70,6 +70,7 @@ public class SMSListener extends BroadcastReceiver {
                 else
                     SMSCom.replyErrorSMS_DisabledPermission(context, phoneNumber, "gps");
                 break;
+            case "instant-photo":
             case "take-photo":
                 if (Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_camera))) {
                     if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_instant_photo)))
