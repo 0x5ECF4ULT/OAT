@@ -10,7 +10,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import at.tacticaldevc.oat.ui.FeaturePage.FeaturesPageActivity;
 import at.tacticaldevc.oat.ui.PasswordSettings.PasswordSettingsActivity;
 import at.tacticaldevc.oat.ui.TrustedNumbers.TrustedNumbersActivity;
-import at.tacticaldevc.oat.utils.DA;
 import at.tacticaldevc.oat.utils.Perms;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         //Permission management
         Perms.loadPermissionStates(this);
         Perms.requestAllPermissions(this, this);
-        DA.request_deviceAdmin(this);
     }
 
     public void openActivityTrustedNumbers(){
