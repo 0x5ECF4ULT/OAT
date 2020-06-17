@@ -1,12 +1,14 @@
 package at.tacticaldevc.oat;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import at.tacticaldevc.oat.listeners.LockDownScreenStateReceiver;
 import at.tacticaldevc.oat.ui.FeaturePage.FeaturesPageActivity;
 import at.tacticaldevc.oat.ui.PasswordSettings.PasswordSettingsActivity;
 import at.tacticaldevc.oat.ui.TrustedNumbers.TrustedNumbersActivity;
@@ -38,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         //Permission management
         Perms.loadPermissionStates(this);
         Perms.requestAllPermissions(this, this);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_USER_PRESENT);
+        registerReceiver(new LockDownScreenStateReceiver(), filter);
     }
 
     public void openActivityTrustedNumbers(){

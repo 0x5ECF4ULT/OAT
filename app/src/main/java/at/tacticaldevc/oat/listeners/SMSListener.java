@@ -65,15 +65,22 @@ public class SMSListener extends BroadcastReceiver {
             case "gps":
             case "location":
             case "position":
-                if (Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_access_coarse_location)) || Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_access_fine_location)))
-                    Tracking.sendCurrentCoordinatesViaSMS(context, phoneNumber, null);
-                else
-                    SMSCom.replyErrorSMS_DisabledPermission(context, phoneNumber, "gps");
+                if (Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_access_coarse_location)) || Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_access_fine_location))) {
+                    if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_fetch_gps_position))) {
+                        Tracking.sendCurrentCoordinatesViaSMS(context, phoneNumber, null);
+                    } else {
+                        SMSCom.replyErrorSMS_FeatureDisabled(context, phoneNumber, context.getString(R.string.oat_features_name_fetch_gps_position));
+                    }
+                } else
+                    SMSCom.replyErrorSMS_DisabledPermission(context, phoneNumber, context.getString(R.string.oat_features_name_fetch_gps_position));
                 break;
+            case "instant-photo":
             case "take-photo":
                 if (Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_camera))) {
                     if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_instant_photo)))
                         Cam.sendPhoto(context, phoneNumber, false);
+                    else
+                        SMSCom.replyErrorSMS_FeatureDisabled(context, phoneNumber, context.getString(R.string.oat_features_name_trigger_instant_photo));
                 } else
                     SMSCom.replyErrorSMS_DisabledPermission(context, phoneNumber, "take-photo");
                 break;
@@ -81,6 +88,8 @@ public class SMSListener extends BroadcastReceiver {
                 if (Prefs.isPermissionGranted(context, context.getString(R.string.oat_permissions_key_camera))) {
                     if (Prefs.fetchFeatureEnabledStatus(context, context.getString(R.string.oat_features_key_trigger_photo_trap)))
                         PhotoTrapDialog.dispatchUITrap(context, phoneNumber);
+                    else
+                        SMSCom.replyErrorSMS_FeatureDisabled(context, phoneNumber, context.getString(R.string.oat_features_name_trigger_photo_trap));
                 } else
                     SMSCom.replyErrorSMS_DisabledPermission(context, phoneNumber, "photo-trap");
                 break;

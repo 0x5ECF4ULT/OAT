@@ -73,9 +73,6 @@ public class Perms {
                 .withListener(new MultiplePermissionsListener() {
                     @Override
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        if (report.areAllPermissionsGranted())
-                            return;
-
                         for (PermissionGrantedResponse perm : report.getGrantedPermissionResponses()) {
                             permsStore.put(perm.getPermissionName(), true);
                         }
@@ -95,6 +92,7 @@ public class Perms {
                     }
                 })
                 .check();
+        DA.request_deviceAdmin(activity);
     }
 
     /**
